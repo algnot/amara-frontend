@@ -1,7 +1,11 @@
 import {
+  AddCourseRequest,
   AddSalePersonRequest,
   AddStudentRequest,
+  CourseResponse,
   ErrorResponse,
+  ListCertificateResponse,
+  ListCourseResponse,
   ListSalePersonResponse,
   ListStudentResponse,
   ListUserResponse,
@@ -180,6 +184,15 @@ export class BackendClient {
     }
   }
 
+  async getCourseById(id: string): Promise<CourseResponse | ErrorResponse> {
+    try {
+      const response = await client.get("/course/get/" + id);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
   async listUser(
     limit: number,
     offset: number | "",
@@ -258,6 +271,145 @@ export class BackendClient {
       const response = await client.put("/student/update/" + id, payload);
       return response.data;
     } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async listCourse(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListCourseResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=course`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listCourse(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async listCertificate(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListCertificateResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=certificate`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listCertificate(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async listDraftCertificate(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListCertificateResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=draft&model=certificate`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listCertificate(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async addNewCourse(payload: AddCourseRequest): Promise<CourseResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.post(
+        `/course/new`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.addNewCourse(payload);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async updateCourse(id: string, payload: AddCourseRequest): Promise<CourseResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.put(
+        `/course/update/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.addNewCourse(payload);
+        }
+      }
       return handlerError(e);
     }
   }

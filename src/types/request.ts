@@ -124,3 +124,34 @@ export interface SalePersonResponse {
   code: string;
   id: number;
 }
+
+export interface ListCourseResponse {
+  next: number;
+  datas: CourseResponse[];
+}
+
+export interface CourseResponse {
+  id: number;
+  course_code: string;
+  name_en: string,
+  name_th: string
+}
+
+export interface AddCourseRequest {
+  course_code: string;
+  name_th: string;
+  name_en: string;
+}
+
+export interface ListCertificateResponse {
+  next: number;
+  datas: CertificateResponse[];
+}
+
+export interface CertificateResponse {
+  id: number;
+  certificate_number: string;
+  batch: string,
+  start_date: string,
+  end_date: string,
+}

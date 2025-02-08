@@ -30,6 +30,7 @@ interface DataTableProps<T> {
   columns?: Array<{ key: keyof T; label: string }>;
   href?: string;
   navigateKey?: keyof T;
+  hideSearch?: boolean;
 }
 
 interface PaginatedResponse<T> {
@@ -42,6 +43,7 @@ export function DataTable<T>({
   columns,
   href,
   navigateKey,
+  hideSearch,
 }: DataTableProps<T>) {
   const setAlert = useAlertContext();
   const [datas, setDatas] = useState<T[][]>([]);
@@ -77,7 +79,7 @@ export function DataTable<T>({
 
   useEffect(() => {
     onFetchData("", filter, limit, true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit]);
 
   const onNextPage = () => {
@@ -105,15 +107,15 @@ export function DataTable<T>({
   };
 
   const onNavigate = (data: T) => {
-    if(href === undefined) {
-      return
+    if (href === undefined) {
+      return;
     }
-    if(navigateKey === undefined) {
-      window.location.href = `${href}`
-      return
+    if (navigateKey === undefined) {
+      window.location.href = `${href}`;
+      return;
     }
-    window.location.href = `${href}${(data[navigateKey] ?? "") as string}`
-  }
+    window.location.href = `${href}${(data[navigateKey] ?? "") as string}`;
+  };
   const columnNames =
     columns ||
     Object.keys(datas[0]?.[0] || {}).map((key) => ({ key, label: key }));
@@ -121,12 +123,17 @@ export function DataTable<T>({
   return (
     <div className="w-full">
       <div className="flex justify-between items-center py-4">
-        <Input
-          placeholder="ค้นหา"
-          className="max-w-sm"
-          value={filter}
-          onChange={(e) => onFilter(e.target.value)}
-        />
+        {!hideSearch ? (
+          <Input
+            placeholder="ค้นหา"
+            className="max-w-sm"
+            value={filter}
+            onChange={(e) => onFilter(e.target.value)}
+          />
+        ) : (
+          <div></div>
+        )}
+
         <div className="flex space-x-4 items-center">
           <Select
             value={limit.toString()}
@@ -184,10 +191,10 @@ export function DataTable<T>({
                         data[key as keyof T] ? (
                           <span className="icon-true">✅</span>
                         ) : (
-                          <span className="icon-false">❌</span> 
+                          <span className="icon-false">❌</span>
                         )
                       ) : (
-                        data[key as keyof T] as ReactNode
+                        (data[key as keyof T] as ReactNode)
                       )}
                     </TableCell>
                   ))}
@@ -208,7 +215,7 @@ export function DataTable<T>({
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          หน้าที่ {page + 1}: {datas[page]?.length || 0} ข้อมูลที่แสดง 
+          หน้าที่ {page + 1}: {datas[page]?.length || 0} ข้อมูลที่แสดง
         </div>
         <Button
           variant="outline"

@@ -22,10 +22,14 @@ const navUser = [
         title: "นักเรียน",
         url: "/dashboard",
       },
-      // {
-      //   title: "ใบประกาศ",
-      //   url: "/dashboard/certificate",
-      // }
+      {
+        title: "คำขอใบประกาศ",
+        url: "/dashboard/draft-certificate",
+      },
+      {
+        title: "ใบประกาศทั้งหมด",
+        url: "/dashboard/certificate",
+      },
     ],
   },
   {
@@ -38,10 +42,10 @@ const navUser = [
       //   title: "สถาบัน",
       //   url: "/dashboard/school",
       // },
-      // {
-      //   title: "หลักสูตร",
-      //   url: "/dashboard/subject",
-      // },
+      {
+        title: "หลักสูตร",
+        url: "/dashboard/course",
+      },
       {
         title: "พนักงานขาย",
         url: "/dashboard/sale-person",

@@ -1,0 +1,145 @@
+"use client";
+import { useAlertContext } from "@/components/provider/alert-provider";
+import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
+import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { BackendClient } from "@/lib/request";
+import { CourseResponse, isErrorResponse } from "@/types/request";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
+
+type PageProps = {
+  params: Promise<{ courseId: string[] }>;
+};
+
+export default function Page({ params }: PageProps) {
+  const client = new BackendClient();
+  const setAlert = useAlertContext();
+  const setNavigation = useNavigateContext();
+  const setFullLoading = useFullLoadingContext();
+  const setLoading = useFullLoadingContext();
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  const [defaultValue, setDefaultValue] = useState<CourseResponse>();
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFullLoading(true);
+    const form = formRef.current;
+    const course_code = form?.course_code?.value ?? "";
+    const name_th = form?.name_th?.value ?? "";
+    const name_en = form?.name_en?.value ?? "";
+
+    const { courseId } = await params;
+    const courseID = Array.isArray(courseId) ? courseId[0] : courseId;
+    const response = await client.updateCourse(courseID, {
+      course_code,
+      name_th,
+      name_en,
+    });
+
+    if (isErrorResponse(response)) {
+      setFullLoading(false);
+      setAlert("ผิดพลาด", response.message, 0, true);
+      return;
+    }
+
+    setAlert(
+      "เพิ่มข้อมูลสำเร็จ",
+      "ระบบอัพเดทข้อมูลให้คุณเรียบร้อยแล้ว",
+      () => {
+        window.location.href = "/dashboard/course";
+      },
+      false
+    );
+  };
+
+  const fetchData = async () => {
+    const { courseId } = await params;
+    const courseID = Array.isArray(courseId) ? courseId[0] : courseId;
+    const response = await client.getCourseById(courseID);
+
+    if (isErrorResponse(response)) {
+      setAlert("ผิดพลาด", response.message, 0, false);
+      setLoading(false);
+      return;
+    }
+
+    setNavigation(
+      [
+        {
+          name: "หลักสูตร",
+          path: "/dashboard/course",
+        },
+      ],
+      `[${response.course_code}] ${response.name_th}`
+    );
+    setDefaultValue(response);
+  };
+
+  useEffect(() => {
+    if (!defaultValue) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <form ref={formRef} onSubmit={onSubmit} className="m-6">
+      <div className="flex justify-between items-center mb-6 ">
+        <div className="ml-4">{defaultValue?.name_th}</div>
+        {/* <div className="">
+          <Button type="submit" className="w-full">
+            เพิ่มพนักงานขาย
+          </Button>
+        </div> */}
+      </div>
+      <div className="p-6 border rounded-lg">
+        <div className="flex flex-col gap-6">
+          <div className="grid gap-2">
+            <Label htmlFor="course_code">รหัสวิชา</Label>
+            <Input
+              id="course_code"
+              name="course_code"
+              type="text"
+              placeholder="รหัสวิชา"
+              defaultValue={defaultValue?.course_code}
+              required
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="name_th">ชื่อหลักสูตร (ไทย)</Label>
+            <Input
+              id="name_th"
+              name="name_th"
+              type="text"
+              placeholder="ชื่อหลักสูตร (ไทย)"
+              defaultValue={defaultValue?.name_th}
+              required
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="name_en">ชื่อหลักสูตร (อังกฤษ)</Label>
+            <Input
+              id="name_en"
+              name="name_en"
+              type="text"
+              placeholder="ชื่อหลักสูตร (อังกฤษ)"
+              defaultValue={defaultValue?.name_en}
+              required
+            />
+          </div>
+          <div className="flex justify-between items-center">
+            <div className=""></div>
+            <div className="">
+              <Button type="submit" className="w-full">
+                อัพเดทหลักสูตร
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
