@@ -13,30 +13,38 @@ import {
 
 const navUser = [
   {
-    title: "แดชบอร์ด",
+    title: "ข้อมูลนักเรียน",
     url: "#",
     icon: Table2,
     isActive: true,
     items: [
       {
-        title: "ข้อมูลนักเรียน",
-        url: "/dashboard/",
+        title: "นักเรียน",
+        url: "/dashboard/student",
+      },
+      {
+        title: "ใบประกาศ",
+        url: "/dashboard/certificate",
       }
     ],
   },
   {
-    title: "ข้อมูล",
+    title: "ข้อมูลหลักสูตร",
     url: "#",
     icon: NotebookText,
     isActive: true,
     items: [
       {
-        title: "หลังสูตรทั้งหมด",
-        url: "/dashboard/problems",
+        title: "สถาบัน",
+        url: "/dashboard/school",
+      },
+      {
+        title: "หลักสูตร",
+        url: "/dashboard/subject",
       },
       {
         title: "พนักงานขาย",
-        url: "/dashboard/problems",
+        url: "/dashboard/sale-person",
       }
     ],
   },
@@ -45,13 +53,13 @@ const navUser = [
 const navAdmin = [
   {
     title: "ผู้ใช้งาน",
-    url: "/dashboard/users",
+    url: "/dashboard/admin/user",
     icon: User2,
     isActive: true,
     items: [
       {
         title: "ผู้ใช้งานทั้งหมด",
-        url: "/dashboard/admin/users",
+        url: "/dashboard/admin/user",
       }
     ],
   }
