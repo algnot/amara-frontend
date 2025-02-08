@@ -14,13 +14,15 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 export default function Page() {
-  const [firstname, setFirstname] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
+  const [firstnameTH, setFirstnameTH] = useState<string>("");
+  const [lastnameTH, setLastnameTH] = useState<string>("");
+  const [firstnameEN, setFirstnameEN] = useState<string>("");
+  const [lastnameEN, setLastnameEN] = useState<string>("");
   const [prefix, setPrefix] = useState<"นาย" | "นาง" | "นางสาว" | "">("");
   const [school, setSchool] = useState<"นวดไทย" | "">("");
 
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-blue-300">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">
           <Card>
@@ -77,8 +79,8 @@ export default function Page() {
                   <Input
                     type="text"
                     placeholder="ชื่อนักเรียน (ภาษาไทย)"
-                    value={firstname}
-                    onChange={(e) => setFirstname(e.target.value)}
+                    value={firstnameTH}
+                    onChange={(e) => setFirstnameTH(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2 mt-4">
@@ -86,8 +88,26 @@ export default function Page() {
                   <Input
                     type="text"
                     placeholder="นามสกุลนักเรียน (ภาษาไทย)"
-                    value={lastname}
-                    onChange={(e) => setLastname(e.target.value)}
+                    value={lastnameTH}
+                    onChange={(e) => setLastnameTH(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2 mt-4">
+                  <Label>ชื่อนักเรียน (ภาษาอังกฤษ)*</Label>
+                  <Input
+                    type="text"
+                    placeholder="ชื่อนักเรียน (ภาษาอังกฤษ)"
+                    value={firstnameEN}
+                    onChange={(e) => setFirstnameEN(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2 mt-4">
+                  <Label>นามสกุลนักเรียน (ภาษาอังกฤษ)*</Label>
+                  <Input
+                    type="text"
+                    placeholder="นามสกุลนักเรียน (ภาษาอังกฤษ)"
+                    value={lastnameEN}
+                    onChange={(e) => setLastnameEN(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2 mt-4">

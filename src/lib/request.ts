@@ -1,0 +1,127 @@
+import {
+  ErrorResponse,
+  ListSalePersonResponse,
+  LoginRequest,
+  LoginResponse,
+  UserType,
+} from "@/types/request";
+import axios, { AxiosInstance } from "axios";
+import { getItem, removeItem, setItem } from "./storage";
+
+const handlerError = (error: unknown): ErrorResponse => {
+  if (axios.isAxiosError(error)) {
+    if (error.response && error.response.data && error.response.data.message) {
+      return {
+        status: false,
+        message: error.response.data.message,
+      };
+    } else {
+      return {
+        status: false,
+        message: error.message,
+      };
+    }
+  } else {
+    return {
+      status: false,
+      message: "An unknow error occurred. try again!",
+    };
+  }
+};
+
+const client: AxiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_PATH,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export class BackendClient {
+  async getUserInfo(): Promise<UserType | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get("/auth/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.getUserInfo();
+        }
+        return {
+          email: "",
+          username: "",
+          role: "USER",
+          image_url: "",
+          uid: 0,
+        };
+      }
+      return handlerError(e);
+    }
+  }
+
+  async generateNewAccessToken(): Promise<ErrorResponse | void> {
+    try {
+      const refreshToken = getItem("refresh_token");
+      const response = await client.get("/auth/generate-access-token", {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      setItem("access_token", response.data.access_token);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        removeItem("refresh_token");
+      }
+      return handlerError(e);
+    }
+  }
+
+  async login(payload: LoginRequest): Promise<LoginResponse | ErrorResponse> {
+    try {
+      const response = await client.post("/auth/login", payload);
+      setItem("access_token", response.data.access_token);
+      setItem("refresh_token", response.data.refresh_token);
+      await this.getUserInfo();
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async listSalePerson(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListSalePersonResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=sale_person`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listSalePerson(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+}

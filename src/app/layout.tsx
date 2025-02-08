@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { Chakra_Petch } from 'next/font/google'
+import { Chakra_Petch } from "next/font/google";
 import "./globals.css";
+import { AlertDialogProvider } from "@/components/provider/alert-provider";
+import { Suspense } from "react";
+import { FullLoadingProvider } from "@/components/provider/full-loading-provider";
+import { UserProvider } from "@/components/provider/user-provider";
 
 export const metadata: Metadata = {
   title: "โรงเรียนอมารา",
@@ -17,7 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={baseFont.className}>
-        {children}
+        <Suspense fallback={<div></div>}>
+          <UserProvider>
+            <FullLoadingProvider>
+              <AlertDialogProvider>{children}</AlertDialogProvider>
+            </FullLoadingProvider>
+          </UserProvider>
+        </Suspense>
       </body>
     </html>
   );
