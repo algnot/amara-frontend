@@ -56,20 +56,20 @@ export default function Page({ params }: PageProps) {
               />
             </div>
             <CardHeader>
-              <CardTitle className="text-2xl">ข้อมูลนักเรียน</CardTitle>
+              <CardTitle className="text-2xl">บัตรนักเรียน</CardTitle>
               <CardDescription>
                 โรงเรียนอมารา นวดเพื่อสุขภาพ เสริมความงาม
               </CardDescription>
               <CardContent className="p-0">
                 <div className="flex flex-col gap-6 mt-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">รหัสนักเรียน</Label>
+                    <Label>รหัสนักเรียน</Label>
                     <div className="text-xl">{studentData?.student_id}</div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-6 mt-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">ชื่อ - นามสกุล (ภาษาไทย)</Label>
+                    <Label>ชื่อ - นามสกุล (ภาษาไทย)</Label>
                     <div className="text-xl">
                       {studentData?.firstname_th} {studentData?.lastname_th}
                     </div>
@@ -77,9 +77,17 @@ export default function Page({ params }: PageProps) {
                 </div>
                 <div className="flex flex-col gap-6 mt-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">ชื่อ - นามสกุล (ภาษาอังกฤษ)</Label>
+                    <Label>ชื่อ - นามสกุล (ภาษาอังกฤษ)</Label>
                     <div className="text-xl">
                       {studentData?.firstname_en} {studentData?.lastname_en}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-6 mt-6">
+                  <div className="grid gap-2">
+                    <Label>ผู้ดูแล</Label>
+                    <div className="text-xl">
+                      {studentData?.sale_person}
                     </div>
                   </div>
                 </div>

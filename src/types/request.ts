@@ -11,7 +11,7 @@ export const isErrorResponse = (data: any): data is ErrorResponse => {
 export interface GetUserInfoResponse {
   email: string;
   image_url: string;
-  role: "USER" | "ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN";
   user_id: number;
   username: string;
 }
@@ -27,7 +27,7 @@ export interface SignUpResponse {
   email: string;
   image_url: string;
   refresh_token: string;
-  role: "USER" | "ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN";
   user_id: number;
   username: string;
 }
@@ -42,7 +42,7 @@ export interface LoginResponse {
   email: string;
   image_url: string;
   refresh_token: string;
-  role: "USER" | "ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN";
   user_id: number;
   username: string;
 }
@@ -63,6 +63,7 @@ export interface ListStudentResponse {
 }
 
 export interface SalePerson {
+  id: string;
   firstname: string;
   lastname: string;
   reference_code: string;
@@ -71,7 +72,7 @@ export interface SalePerson {
 export interface UserType {
   email: string;
   username: string;
-  role: "USER" | "ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN";
   image_url: string;
   uid: number;
 }
@@ -101,4 +102,25 @@ export interface StudentResponse {
   firstname_en: string;
   lastname_en: string;
   student_id: string;
+  sale_person: string;
+}
+
+export interface AddSalePersonRequest {
+  firstname: string;
+  lastname: string;
+  code: string;
+}
+
+export interface UpdateStudentRequest {
+  firstname_th: string;
+  lastname_th: string;
+  firstname_en: string;
+  lastname_en: string;
+}
+
+export interface SalePersonResponse {
+  firstname: string;
+  lastname: string;
+  code: string;
+  id: number;
 }

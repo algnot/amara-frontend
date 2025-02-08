@@ -29,7 +29,7 @@ const navUser = [
     ],
   },
   {
-    title: "ข้อมูลหลักสูตร",
+    title: "ข้อมูลโรงเรียน",
     url: "#",
     icon: NotebookText,
     isActive: true,
@@ -69,7 +69,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarContent className="mt-5">
+      <SidebarContent className="pt-5">
         <NavMain items={navUser} title="แดชบอร์ด" />
         <NavMain items={navAdmin} title="สำหรับผู้ดูแลระบบ" />
       </SidebarContent>

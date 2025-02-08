@@ -1,4 +1,5 @@
 import {
+  AddSalePersonRequest,
   AddStudentRequest,
   ErrorResponse,
   ListSalePersonResponse,
@@ -6,7 +7,10 @@ import {
   ListUserResponse,
   LoginRequest,
   LoginResponse,
+  SalePerson,
+  SalePersonResponse,
   StudentResponse,
+  UpdateStudentRequest,
   UserType,
 } from "@/types/request";
 import axios, { AxiosInstance } from "axios";
@@ -201,6 +205,59 @@ export class BackendClient {
           return this.listUser(limit, offset, text);
         }
       }
+      return handlerError(e);
+    }
+  }
+
+  async addNewSalePerson(payload: AddSalePersonRequest): Promise<SalePersonResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.post(
+        `/sale-person/new`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.addNewSalePerson(payload);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async getSalePersonById(id: string): Promise<SalePerson | ErrorResponse> {
+    try {
+      const response = await client.get("/sale-person/get/" + id);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async updateSalePersonById(id: string, payload: AddSalePersonRequest): Promise<SalePerson | ErrorResponse> {
+    try {
+      const response = await client.put("/sale-person/update/" + id, payload);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async updateStudentById(id: string, payload: UpdateStudentRequest): Promise<StudentResponse | ErrorResponse> {
+    try {
+      const response = await client.put("/student/update/" + id, payload);
+      return response.data;
+    } catch (e) {
       return handlerError(e);
     }
   }

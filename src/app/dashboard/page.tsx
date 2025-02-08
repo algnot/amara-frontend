@@ -26,7 +26,7 @@ export default function Page() {
           { key: "firstname_en", label: "ชื่อ (อังกฤษ)" },
           { key: "lastname_en", label: "นามสกุล (อังกฤษ)" },
         ]}
-        href="/student/"
+        href="/dashboard/student/edit/"
         navigateKey="student_id"
       />
     </div>
