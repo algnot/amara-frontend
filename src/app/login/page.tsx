@@ -39,7 +39,7 @@ export default function Page() {
 
     if (isErrorResponse(response)) {
       setFullLoading(false);
-      setAlert("Error", response.message, 0, true);
+      setAlert("ผิดพลาด", response.message, 0, true);
       return;
     }
 

@@ -20,12 +20,12 @@ const navUser = [
     items: [
       {
         title: "นักเรียน",
-        url: "/dashboard/student",
+        url: "/dashboard",
       },
-      {
-        title: "ใบประกาศ",
-        url: "/dashboard/certificate",
-      }
+      // {
+      //   title: "ใบประกาศ",
+      //   url: "/dashboard/certificate",
+      // }
     ],
   },
   {
@@ -34,14 +34,14 @@ const navUser = [
     icon: NotebookText,
     isActive: true,
     items: [
-      {
-        title: "สถาบัน",
-        url: "/dashboard/school",
-      },
-      {
-        title: "หลักสูตร",
-        url: "/dashboard/subject",
-      },
+      // {
+      //   title: "สถาบัน",
+      //   url: "/dashboard/school",
+      // },
+      // {
+      //   title: "หลักสูตร",
+      //   url: "/dashboard/subject",
+      // },
       {
         title: "พนักงานขาย",
         url: "/dashboard/sale-person",
@@ -53,13 +53,13 @@ const navUser = [
 const navAdmin = [
   {
     title: "ผู้ใช้งาน",
-    url: "/dashboard/admin/user",
+    url: "/dashboard/admin/users",
     icon: User2,
     isActive: true,
     items: [
       {
         title: "ผู้ใช้งานทั้งหมด",
-        url: "/dashboard/admin/user",
+        url: "/dashboard/admin/users",
       }
     ],
   }

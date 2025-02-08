@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/table";
 import { ErrorResponse, isErrorResponse } from "@/types/request";
 import { useAlertContext } from "@/components/provider/alert-provider";
-import { useFullLoadingContext } from "../provider/full-loading-provider";
 
 interface DataTableProps<T> {
   fetchData: (
@@ -44,7 +43,6 @@ export function DataTable<T>({
   href,
   navigateKey,
 }: DataTableProps<T>) {
-  const setLoading = useFullLoadingContext();
   const setAlert = useAlertContext();
   const [datas, setDatas] = useState<T[][]>([]);
   const [page, setPage] = useState<number>(0);
@@ -61,8 +59,7 @@ export function DataTable<T>({
     const response = await fetchData(limit, offset, filter);
 
     if (isErrorResponse(response)) {
-      setAlert("Error", response.message, 0, true);
-      setLoading(false);
+      setAlert("ผิดพลาด", response.message, 0, true);
       return;
     }
 
@@ -157,7 +154,7 @@ export function DataTable<T>({
               variant="outline"
               size="sm"
               onClick={onNextPage}
-              disabled={nextIds[page] === -1}
+              disabled={nextIds[page] === -1 || datas.length == 0}
             >
               ต่อไป
             </Button>
@@ -225,7 +222,7 @@ export function DataTable<T>({
           variant="outline"
           size="sm"
           onClick={onNextPage}
-          disabled={nextIds[page] === -1}
+          disabled={nextIds[page] === -1 || datas.length == 0}
         >
           ต่อไป
         </Button>

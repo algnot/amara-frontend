@@ -24,8 +24,8 @@ export default function Page() {
           { key: "firstname", label: "ชื่อ" },
           { key: "lastname", label: "นามสกุล" },
         ]}
-        href="/dashboard/sale-person/"
-        navigateKey="reference_code"
+        // href="/dashboard/sale-person/"
+        // navigateKey="reference_code"
       />
     </div>
   )

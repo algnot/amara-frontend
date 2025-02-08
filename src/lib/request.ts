@@ -1,8 +1,12 @@
 import {
+  AddStudentRequest,
   ErrorResponse,
   ListSalePersonResponse,
+  ListStudentResponse,
+  ListUserResponse,
   LoginRequest,
   LoginResponse,
+  StudentResponse,
   UserType,
 } from "@/types/request";
 import axios, { AxiosInstance } from "axios";
@@ -119,6 +123,82 @@ export class BackendClient {
         if (refreshToken) {
           await this.generateNewAccessToken();
           return this.listSalePerson(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async listStudent(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListStudentResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=student`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listStudent(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async addNewStudent(payload: AddStudentRequest): Promise<StudentResponse | ErrorResponse> {
+    try {
+      const response = await client.post("/student/new", payload);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getStudentByStudentCode(studentCode: string): Promise<StudentResponse | ErrorResponse> {
+    try {
+      const response = await client.get("/student/get/" + studentCode);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async listUser(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListUserResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=user`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listUser(limit, offset, text);
         }
       }
       return handlerError(e);

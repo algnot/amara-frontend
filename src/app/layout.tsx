@@ -23,9 +23,9 @@ export default function RootLayout({
       <body className={baseFont.className}>
         <Suspense fallback={<div></div>}>
           <UserProvider>
-            <FullLoadingProvider>
-              <AlertDialogProvider>{children}</AlertDialogProvider>
-            </FullLoadingProvider>
+            <AlertDialogProvider>
+              <FullLoadingProvider>{children}</FullLoadingProvider>
+            </AlertDialogProvider>
           </UserProvider>
         </Suspense>
       </body>

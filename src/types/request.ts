@@ -52,6 +52,16 @@ export interface ListSalePersonResponse {
   datas: SalePerson[];
 }
 
+export interface ListUserResponse {
+  next: number;
+  datas: UserType[];
+}
+
+export interface ListStudentResponse {
+  next: number;
+  datas: StudentResponse[];
+}
+
 export interface SalePerson {
   firstname: string;
   lastname: string;
@@ -76,3 +86,19 @@ export const isUserType = (data: any): data is UserType => {
     typeof data.uid === "number"
   );
 };
+
+export interface AddStudentRequest {
+  firstname_th: string;
+  lastname_th: string;
+  firstname_en: string;
+  lastname_en: string;
+  ref_code: string;
+}
+
+export interface StudentResponse {
+  firstname_th: string;
+  lastname_th: string;
+  firstname_en: string;
+  lastname_en: string;
+  student_id: string;
+}
