@@ -44,7 +44,15 @@ export default function Page({ params }: PageProps) {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    const payload = {
+      student_id: studentData?.id,
+      course_id: 3,
+      start_date: startDate,
+      end_date: endDate,
+    };
+    console.log(payload);
+  };
 
   const fetchData = async () => {
     const { studentId } = await params;

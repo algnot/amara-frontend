@@ -97,6 +97,7 @@ export interface AddStudentRequest {
 }
 
 export interface StudentResponse {
+  id: string;
   firstname_th: string;
   lastname_th: string;
   firstname_en: string;
