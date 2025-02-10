@@ -5,6 +5,7 @@ import { useNavigateContext } from "@/components/provider/navigation-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BackendClient } from "@/lib/request";
+import { convertToEngDate, convertToThaiDate } from "@/lib/utils";
 import { GetCertificateResponse, isErrorResponse } from "@/types/request";
 import { Label } from "@radix-ui/react-label";
 import Link from "next/link";
@@ -85,6 +86,80 @@ export default function Page({ params }: PageProps) {
     setDefaultValue(response);
   };
 
+  const actionPrintCertificateEN = async () => {
+    setLoading(true);
+    try {
+      const response = await client.getCertificatePDF({
+        url: window.location.protocol + "//" + window.location.host + "/certificate-1.0-en-fill.pdf",
+        params: {
+          number: `Certificate No. ${defaultValue?.certificate_number}`,
+          name: `${defaultValue?.student.firstname_en} ${defaultValue?.student.lastname_en}`,
+          course_name: `${defaultValue?.course.name_en}`,
+          certificate_date:
+            `Batch ${defaultValue?.batch} between ${convertToEngDate(defaultValue?.start_date ?? "")} and ${convertToEngDate(defaultValue?.end_date ?? "")}`,
+          date: `Given on ${convertToEngDate(defaultValue?.given_date ?? "")}`,
+        },
+      });
+
+      if (isErrorResponse(response)) {
+        setAlert("ผิดพลาด", response.message, 0, false);
+        setLoading(false);
+        return;
+      }
+
+      const pdfBlob = new Blob([response], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank");
+
+      setLoading(false);
+    } catch (error) {
+      setAlert(
+        "ผิดพลาด",
+        `ไม่สามารถพิมพ์ใบประกาศได้ error: ${error}`,
+        0,
+        false
+      );
+      setLoading(false);
+    }
+  };
+
+  const actionPrintCertificateTH = async () => {
+    setLoading(true);
+    try {
+      const response = await client.getCertificatePDF({
+        url: window.location.protocol + "//" + window.location.host + "/certificate-1.0-th-fill.pdf",
+        params: {
+          number: `ใบประกาศเลขที่ ${defaultValue?.certificate_number}`,
+          name: `${defaultValue?.student.firstname_th} ${defaultValue?.student.lastname_th}`,
+          course_name: `${defaultValue?.course.name_th}`,
+          certificate_date:
+            `รุ่นที่ ${defaultValue?.batch} ระหว่างวันที่ ${convertToThaiDate(defaultValue?.start_date ?? "")} ถึงวันที่ ${convertToThaiDate(defaultValue?.end_date ?? "")}`,
+          date: `ให้ไว้ ณ วันที่ ${convertToThaiDate(defaultValue?.given_date ?? "")}`,
+        },
+      });
+
+      if (isErrorResponse(response)) {
+        setAlert("ผิดพลาด", response.message, 0, false);
+        setLoading(false);
+        return;
+      }
+
+      const pdfBlob = new Blob([response], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank");
+
+      setLoading(false);
+    } catch (error) {
+      setAlert(
+        "ผิดพลาด",
+        `ไม่สามารถพิมพ์ใบประกาศได้ error: ${error}`,
+        0,
+        false
+      );
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!defaultValue) {
       fetchData();
@@ -101,8 +176,12 @@ export default function Page({ params }: PageProps) {
         <div className="flex gap-2">
           {defaultValue?.batch !== "draft" && defaultValue?.given_date && (
             <>
-              <Button className="w-full">พิมพ์ใบประกาศ (ไทย)</Button>
-              <Button className="w-full">พิมพ์ใบประกาศ (อังกฤษ)</Button>
+              <Button className="w-full" onClick={actionPrintCertificateTH}>
+                พิมพ์ใบประกาศ (ไทย)
+              </Button>
+              <Button className="w-full" onClick={actionPrintCertificateEN}>
+                พิมพ์ใบประกาศ (อังกฤษ)
+              </Button>
             </>
           )}
         </div>

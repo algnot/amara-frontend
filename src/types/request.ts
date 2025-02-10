@@ -192,3 +192,16 @@ export interface UpdateCertificateRequest {
   batch: string;
   given_date: number;
 }
+
+export interface GetCertificateParamRequest {
+  number: string;
+  name: string;
+  course_name: string;
+  certificate_date: string;
+  date: string;
+}
+
+export interface GetCertificatePDFRequest {
+  url: string;
+  params: GetCertificateParamRequest;
+}

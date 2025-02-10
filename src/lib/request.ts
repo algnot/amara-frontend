@@ -4,6 +4,7 @@ import {
   AddStudentRequest,
   CourseResponse,
   ErrorResponse,
+  GetCertificatePDFRequest,
   GetCertificateResponse,
   ListCertificateResponse,
   ListCourseResponse,
@@ -465,6 +466,19 @@ export class BackendClient {
     try {
       const response = await client.put("/certificate/update/" + id, payload);
       return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getCertificatePDF(
+    payload: GetCertificatePDFRequest
+  ): Promise<Buffer | ErrorResponse> {
+    try {
+      const response = await client.post("/pdf/fill", payload, {
+        responseType: "arraybuffer",
+      });
+      return Buffer.from(response.data);
     } catch (e) {
       return handlerError(e);
     }
