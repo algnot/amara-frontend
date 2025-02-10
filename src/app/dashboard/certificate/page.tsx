@@ -26,7 +26,7 @@ export default function Page() {
           { key: "end_date", label: "วันที่เรียนจบ" },
         ]}
         href="/dashboard/certificate/edit/"
-        navigateKey="id"
+        navigateKey="certificate_number"
       />
     </div>
   );

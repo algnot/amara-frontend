@@ -4,6 +4,7 @@ import {
   AddStudentRequest,
   CourseResponse,
   ErrorResponse,
+  GetCertificateResponse,
   ListCertificateResponse,
   ListCourseResponse,
   ListSalePersonResponse,
@@ -11,9 +12,12 @@ import {
   ListUserResponse,
   LoginRequest,
   LoginResponse,
+  RequestCertificateRequest,
+  RequestCertificateResponse,
   SalePerson,
   SalePersonResponse,
   StudentResponse,
+  UpdateCertificateRequest,
   UpdateStudentRequest,
   UserType,
 } from "@/types/request";
@@ -166,7 +170,9 @@ export class BackendClient {
     }
   }
 
-  async addNewStudent(payload: AddStudentRequest): Promise<StudentResponse | ErrorResponse> {
+  async addNewStudent(
+    payload: AddStudentRequest
+  ): Promise<StudentResponse | ErrorResponse> {
     try {
       const response = await client.post("/student/new", payload);
       return response.data;
@@ -175,7 +181,9 @@ export class BackendClient {
     }
   }
 
-  async getStudentByStudentCode(studentCode: string): Promise<StudentResponse | ErrorResponse> {
+  async getStudentByStudentCode(
+    studentCode: string
+  ): Promise<StudentResponse | ErrorResponse> {
     try {
       const response = await client.get("/student/get/" + studentCode);
       return response.data;
@@ -222,18 +230,16 @@ export class BackendClient {
     }
   }
 
-  async addNewSalePerson(payload: AddSalePersonRequest): Promise<SalePersonResponse | ErrorResponse> {
+  async addNewSalePerson(
+    payload: AddSalePersonRequest
+  ): Promise<SalePersonResponse | ErrorResponse> {
     try {
       const accessToken = getItem("access_token");
-      const response = await client.post(
-        `/sale-person/new`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await client.post(`/sale-person/new`, payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -257,7 +263,10 @@ export class BackendClient {
     }
   }
 
-  async updateSalePersonById(id: string, payload: AddSalePersonRequest): Promise<SalePerson | ErrorResponse> {
+  async updateSalePersonById(
+    id: string,
+    payload: AddSalePersonRequest
+  ): Promise<SalePerson | ErrorResponse> {
     try {
       const response = await client.put("/sale-person/update/" + id, payload);
       return response.data;
@@ -266,7 +275,10 @@ export class BackendClient {
     }
   }
 
-  async updateStudentById(id: string, payload: UpdateStudentRequest): Promise<StudentResponse | ErrorResponse> {
+  async updateStudentById(
+    id: string,
+    payload: UpdateStudentRequest
+  ): Promise<StudentResponse | ErrorResponse> {
     try {
       const response = await client.put("/student/update/" + id, payload);
       return response.data;
@@ -362,18 +374,16 @@ export class BackendClient {
     }
   }
 
-  async addNewCourse(payload: AddCourseRequest): Promise<CourseResponse | ErrorResponse> {
+  async addNewCourse(
+    payload: AddCourseRequest
+  ): Promise<CourseResponse | ErrorResponse> {
     try {
       const accessToken = getItem("access_token");
-      const response = await client.post(
-        `/course/new`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await client.post(`/course/new`, payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -388,18 +398,17 @@ export class BackendClient {
     }
   }
 
-  async updateCourse(id: string, payload: AddCourseRequest): Promise<CourseResponse | ErrorResponse> {
+  async updateCourse(
+    id: string,
+    payload: AddCourseRequest
+  ): Promise<CourseResponse | ErrorResponse> {
     try {
       const accessToken = getItem("access_token");
-      const response = await client.put(
-        `/course/update/${id}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await client.put(`/course/update/${id}`, payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -410,6 +419,53 @@ export class BackendClient {
           return this.addNewCourse(payload);
         }
       }
+      return handlerError(e);
+    }
+  }
+
+  async requestCertificate(
+    payload: RequestCertificateRequest
+  ): Promise<RequestCertificateResponse | ErrorResponse> {
+    try {
+      const accessToken = getItem("access_token");
+      const response = await client.post(`/certificate/request`, payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.requestCertificate(payload);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async getCertificateById(
+    id: string
+  ): Promise<GetCertificateResponse | ErrorResponse> {
+    try {
+      const response = await client.get("/certificate/get/" + id);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async updateCertificateById(
+    id: string,
+    payload: UpdateCertificateRequest
+  ): Promise<GetCertificateResponse | ErrorResponse> {
+    try {
+      const response = await client.put("/certificate/update/" + id, payload);
+      return response.data;
+    } catch (e) {
       return handlerError(e);
     }
   }

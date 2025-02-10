@@ -156,3 +156,39 @@ export interface CertificateResponse {
   start_date: string,
   end_date: string,
 }
+
+export interface RequestCertificateRequest {
+  student_id: number;
+  course_id: number;
+  start_date: string;
+  end_date: string;
+}
+
+export interface RequestCertificateResponse {
+  id: number;
+  student_id: number;
+  certificate_number: number;
+  batch: number;
+  course_id: number;
+  given_date: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface GetCertificateResponse {
+  id: number;
+  certificate_number: number;
+  student: StudentResponse;
+  course: CourseResponse;
+  batch: string;
+  given_date: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface UpdateCertificateRequest {
+  start_date: string;
+  end_date: string;
+  batch: string;
+  given_date: number;
+}

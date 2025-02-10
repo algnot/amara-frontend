@@ -44,14 +44,24 @@ export default function Page({ params }: PageProps) {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  const onSubmit = () => {
-    const payload = {
-      student_id: studentData?.id,
-      course_id: 3,
+  const onSubmit = async () => {
+    setLoading(true);
+    const response = await client.requestCertificate({
+      student_id: Number(studentData?.id),
+      course_id: selectedCourse?.id ?? 0,
       start_date: startDate,
       end_date: endDate,
-    };
-    console.log(payload);
+    });
+
+    if (isErrorResponse(response)) {
+      setLoading(false);
+      setAlert("ผิดพลาด", response.message, 0, true);
+      return;
+    }
+
+    setAlert("ส่งคำขอสำเร็จ", "ระบบได้ส่งคำขอสร้างใบประกาศเรียบร้อยแล้ว", () => {
+      window.location.href = "/certificate";
+    }, false);
   };
 
   const fetchData = async () => {
@@ -168,17 +178,21 @@ export default function Page({ params }: PageProps) {
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     placeholder="วันที่เริ่มเรียน"
+                    max={endDate}
                   />
                 </div>
-                <div className="grid gap-2 mt-4">
-                  <Label>วันที่เริ่มเรียน</Label>
-                  <Input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    placeholder="วันที่เรียนจบ"
-                  />
-                </div>
+                {startDate && (
+                  <div className="grid gap-2 mt-4">
+                    <Label>วันที่เริ่มเรียน</Label>
+                    <Input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      placeholder="วันที่เรียนจบ"
+                      min={startDate}
+                    />
+                  </div>
+                )}
                 <Button className="w-full mt-4" onClick={onSubmit}>
                   ขอใบประกาศ
                 </Button>
