@@ -204,4 +204,5 @@ export interface GetCertificateParamRequest {
 export interface GetCertificatePDFRequest {
   url: string;
   params: GetCertificateParamRequest;
+  lang: "th" | "en";
 }

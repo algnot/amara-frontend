@@ -99,6 +99,7 @@ export default function Page({ params }: PageProps) {
             `Batch ${defaultValue?.batch} between ${convertToEngDate(defaultValue?.start_date ?? "")} and ${convertToEngDate(defaultValue?.end_date ?? "")}`,
           date: `Given on ${convertToEngDate(defaultValue?.given_date ?? "")}`,
         },
+        lang: "en"
       });
 
       if (isErrorResponse(response)) {
@@ -129,13 +130,14 @@ export default function Page({ params }: PageProps) {
       const response = await client.getCertificatePDF({
         url: window.location.protocol + "//" + window.location.host + "/certificate-1.0-th-fill.pdf",
         params: {
-          number: `ใบประกาศเลขที่ ${defaultValue?.certificate_number}`,
+          number: `เลขที่ ${defaultValue?.certificate_number}`,
           name: `${defaultValue?.student.firstname_th} ${defaultValue?.student.lastname_th}`,
           course_name: `${defaultValue?.course.name_th}`,
           certificate_date:
             `รุ่นที่ ${defaultValue?.batch} ระหว่างวันที่ ${convertToThaiDate(defaultValue?.start_date ?? "")} ถึงวันที่ ${convertToThaiDate(defaultValue?.end_date ?? "")}`,
           date: `ให้ไว้ ณ วันที่ ${convertToThaiDate(defaultValue?.given_date ?? "")}`,
         },
+        lang: "th"
       });
 
       if (isErrorResponse(response)) {
