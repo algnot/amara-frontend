@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "โรงเรียนอมารา นวดเพื่อสุขภาพ เสริมความงาม",
 };
 
-const baseFont = Chakra_Petch({ weight: "400" });
+const baseFont = Chakra_Petch({ weight: "400", subsets: ["thai", "latin", "latin-ext", "vietnamese"] });
 
 export default function RootLayout({
   children,
