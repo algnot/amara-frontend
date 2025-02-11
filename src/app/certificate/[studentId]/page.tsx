@@ -183,7 +183,7 @@ export default function Page({ params }: PageProps) {
                 </div>
                 {startDate && (
                   <div className="grid gap-2 mt-4">
-                    <Label>วันที่เริ่มเรียน</Label>
+                    <Label>วันที่เรียนจบ</Label>
                     <Input
                       type="date"
                       value={endDate}
