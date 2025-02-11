@@ -235,12 +235,12 @@ export default function Page({ params }: PageProps) {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="end_date">วันที่เริ่มจบ</Label>
+            <Label htmlFor="end_date">วันที่เรียนจบ</Label>
             <Input
               id="end_date"
               name="end_date"
               type="date"
-              placeholder="วันที่เริ่มจบ"
+              placeholder="วันที่เรียนจบ"
               defaultValue={
                 defaultValue?.end_date
                   ? new Date(defaultValue.end_date).toISOString().split("T")[0]
