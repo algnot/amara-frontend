@@ -34,14 +34,12 @@ export default function Page({ params }: PageProps) {
     const lastname_en = form?.lastname_en?.value ?? "";
 
     const { studentId } = await params;
-    const studentID = Array.isArray(studentId)
-      ? studentId[0]
-      : studentId;
+    const studentID = Array.isArray(studentId) ? studentId[0] : studentId;
     const response = await client.updateStudentById(studentID, {
       firstname_th,
       lastname_th,
       firstname_en,
-      lastname_en
+      lastname_en,
     });
 
     if (isErrorResponse(response)) {
@@ -62,9 +60,7 @@ export default function Page({ params }: PageProps) {
 
   const fetchData = async () => {
     const { studentId } = await params;
-    const studentID = Array.isArray(studentId)
-      ? studentId[0]
-      : studentId;
+    const studentID = Array.isArray(studentId) ? studentId[0] : studentId;
     const response = await client.getStudentByStudentCode(studentID);
 
     if (isErrorResponse(response)) {
@@ -99,7 +95,14 @@ export default function Page({ params }: PageProps) {
           ({defaultValue?.student_id}) {defaultValue?.firstname_th}{" "}
           {defaultValue?.lastname_th}
         </div>
-        <div className="">
+        <div className="flex gap-2">
+          <Link
+            target="_blank"
+            href={`/certificate/${defaultValue?.student_id}`}
+            className="w-full"
+          >
+            <Button>ออกใบประกาศ</Button>
+          </Link>
           <Link
             target="_blank"
             href={`/student/${defaultValue?.student_id}`}
