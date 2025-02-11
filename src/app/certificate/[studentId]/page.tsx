@@ -157,7 +157,7 @@ export default function Page({ params }: PageProps) {
                         )}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
+                    <DropdownMenuContent align="start" className="max-h-60 overflow-y-auto">
                       {allCouse.map((value, index) => {
                         return (
                           <DropdownMenuItem
