@@ -70,7 +70,7 @@ export default function Page({ params }: PageProps) {
     const response = await client.getStudentByStudentCode(studentID);
 
     if (isErrorResponse(response)) {
-      setAlert("ผิดพลาด", response.message, 0, false);
+      setAlert("ผิดพลาด", response.message, 0, true);
       setLoading(false);
       return;
     }
@@ -78,7 +78,7 @@ export default function Page({ params }: PageProps) {
 
     const allCouse = await client.listCourse(99999, "", "");
     if (isErrorResponse(allCouse)) {
-      setAlert("ผิดพลาด", allCouse.message, 0, false);
+      setAlert("ผิดพลาด", allCouse.message, 0, true);
       setLoading(false);
       return;
     }
