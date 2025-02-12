@@ -5,6 +5,7 @@ import { AlertDialogProvider } from "@/components/provider/alert-provider";
 import { Suspense } from "react";
 import { FullLoadingProvider } from "@/components/provider/full-loading-provider";
 import { UserProvider } from "@/components/provider/user-provider";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "โรงเรียนอมารา",
@@ -28,6 +29,7 @@ export default function RootLayout({
             </AlertDialogProvider>
           </UserProvider>
         </Suspense>
+        <SpeedInsights />
       </body>
     </html>
   );
