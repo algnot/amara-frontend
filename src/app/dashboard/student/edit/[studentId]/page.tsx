@@ -192,7 +192,7 @@ export default function Page({ params }: PageProps) {
           {
             defaultValue?.certificate.map((value, index) => {
               return (
-                <Link key={index} className="border rounded-lg p-4 cursor-pointer mb-1" href={`/dashboard/certificate/edit/${value.certificate_number}`}>
+                <Link key={index} className="border rounded-lg p-4 cursor-pointer mb-1 text-md" href={`/dashboard/certificate/edit/${value.certificate_number}`}>
                   {value.certificate_number} {value.course.name_th} รุ่นที่ {value.batch}
                 </Link>
               )
