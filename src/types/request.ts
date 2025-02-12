@@ -104,6 +104,7 @@ export interface StudentResponse {
   lastname_en: string;
   student_id: string;
   sale_person: string;
+  certificate: GetCertificateResponse[];
 }
 
 export interface AddSalePersonRequest {

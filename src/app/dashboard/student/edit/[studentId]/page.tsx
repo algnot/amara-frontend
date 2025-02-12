@@ -186,6 +186,20 @@ export default function Page({ params }: PageProps) {
           </div>
         </div>
       </form>
+      <div className="p-6 border rounded-lg m-6">
+        <div className="flex flex-col gap-6">
+          <div>ใบประกาศ</div>
+          {
+            defaultValue?.certificate.map((value, index) => {
+              return (
+                <Link key={index} className="border rounded-lg p-4 cursor-pointer mb-2" href={`/dashboard/certificate/edit/${value.certificate_number}`}>
+                  {value.certificate_number} {value.course.name_th} รุ่นที่ {value.batch}
+                </Link>
+              )
+            })
+          }
+        </div>
+      </div>
     </>
   );
 }
