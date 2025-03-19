@@ -46,11 +46,11 @@ export function AlertDialogComponent({
         </AlertDialogHeader>
         <AlertDialogFooter>
           {canCancel && (
-            <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={onCancel}>ยกเลิก</AlertDialogCancel>
           )}
           {typeof action !== "number" && (
             <AlertDialogAction onClick={handleActionClick}>
-              Continue
+              ยืนยัน
             </AlertDialogAction>
           )}
         </AlertDialogFooter>

@@ -459,6 +459,17 @@ export class BackendClient {
     }
   }
 
+  async deleteCertificateById(
+    id: string
+  ): Promise<GetCertificateResponse | ErrorResponse> {
+    try {
+      const response = await client.delete("/certificate/delete/" + id);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
   async updateCertificateById(
     id: string,
     payload: UpdateCertificateRequest

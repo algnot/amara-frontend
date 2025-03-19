@@ -84,6 +84,36 @@ export default function Page({ params }: PageProps) {
     setDefaultValue(response);
   };
 
+  const onArchive = async () => {
+    setAlert(
+      "ยืนยันการลบใบประกาศเลขที่ " + defaultValue?.certificate_number,
+      "หากลบแล้วจะระบบจะไม่แสดงใบประกาศนี้อีก",
+      async () => {
+        const { certificateId } = await params;
+        const certificateID = Array.isArray(certificateId)
+          ? certificateId[0]
+          : certificateId;
+        const response = await client.deleteCertificateById(certificateID);
+
+        if (isErrorResponse(response)) {
+          setAlert("ผิดพลาด", response.message, 0, false);
+          setLoading(false);
+          return;
+        }
+
+        setAlert(
+          "ลบข้อมูลใบประกาศเรียบร้อยแล้ว",
+          "ระบบลบข้อมูลใบประกาศให้คุณเรียบร้อยแล้ว",
+          () => {
+            window.location.href = "/dashboard/certificate";
+          },
+          false
+        );
+      },
+      true
+    );
+  };
+
   useEffect(() => {
     if (!defaultValue) {
       fetchData();
@@ -223,9 +253,18 @@ export default function Page({ params }: PageProps) {
               required
             />
           </div>
-          <div className="flex justify-between items-center">
-            <div className=""></div>
-            <div className="">
+          <div className="flex justify-between items-center mt-4">
+            <div>
+              <Button
+                type="button"
+                onClick={onArchive}
+                className="w-full"
+                variant="destructive"
+              >
+                ลบใบประกาศ
+              </Button>
+            </div>
+            <div>
               <Button type="submit" className="w-full">
                 บันทึกข้อมูล
               </Button>
