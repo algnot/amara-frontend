@@ -131,16 +131,16 @@ export default function Page({ params }: PageProps) {
           {defaultValue?.batch !== "draft" && defaultValue?.given_date && (
             <>
               <Link
-                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
-                target="_blank"
-              >
-                <Button className="w-full">พิมพ์ใบประกาศ (ไทย)</Button>
-              </Link>
-              <Link
                 href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
                 target="_blank"
               >
                 <Button className="w-full">ตัวอย่างใบประกาศ (อังกฤษ)</Button>
+              </Link>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
+                target="_blank"
+              >
+                <Button className="w-full">พิมพ์ใบประกาศ (ไทย)</Button>
               </Link>
             </>
           )}
