@@ -136,13 +136,15 @@ export interface CourseResponse {
   id: number;
   course_code: string;
   name_en: string,
-  name_th: string
+  name_th: string,
+  version: string,
 }
 
 export interface AddCourseRequest {
   course_code: string;
   name_th: string;
   name_en: string;
+  version: string;
 }
 
 export interface ListCertificateResponse {

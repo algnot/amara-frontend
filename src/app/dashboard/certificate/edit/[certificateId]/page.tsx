@@ -93,29 +93,53 @@ export default function Page({ params }: PageProps) {
 
   return (
     <div className="m-6">
-      <div className="flex justify-between items-center mb-6 ">
+      <div className="flex justify-between items-center mb-2">
         <div className="ml-4">
           เลขที่ใบประกาศ {defaultValue?.certificate_number}
         </div>
         <div className="flex gap-2">
           {defaultValue?.batch !== "draft" && defaultValue?.given_date && (
             <>
-              <Link href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/1.0/${defaultValue?.certificate_number}`} target="_blank">
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
+                target="_blank"
+              >
                 <Button className="w-full">พิมพ์ใบประกาศ (ไทย)</Button>
               </Link>
-              <Link href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/1.0/${defaultValue?.certificate_number}`} target="_blank">
-                <Button className="w-full">พิมพ์ใบประกาศ (อังกฤษ)</Button>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
+                target="_blank"
+              >
+                <Button className="w-full">ตัวอย่างใบประกาศ (อังกฤษ)</Button>
               </Link>
             </>
           )}
         </div>
+      </div>
+      <div className="flex gap-2 justify-end mb-4">
+        {defaultValue?.batch !== "draft" && defaultValue?.given_date && (
+          <>
+            <Link
+              href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
+              target="_blank"
+            >
+              <Button className="w-full">พิมพ์ใบประกาศ (อังกฤษ)</Button>
+            </Link>
+            <Link
+              href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
+              target="_blank"
+            >
+              <Button className="w-full">ตัวอย่างใบประกาศ (ไทย)</Button>
+            </Link>
+          </>
+        )}
       </div>
       <form className="p-6 border rounded-lg" ref={formRef} onSubmit={onSubmit}>
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">
             <Label>นักเรียน</Label>
             <Link
-              className="hover:underline text-blue-800 text-md"
+              className="hover:underline text-blue-800 text-md w-fit"
               href={`/dashboard/student/edit/${defaultValue?.student.student_id}`}
             >
               {defaultValue?.student.student_id} -{" "}
@@ -128,7 +152,7 @@ export default function Page({ params }: PageProps) {
           <div className="grid gap-2">
             <Label htmlFor="lastname">หลักสูตร</Label>
             <Link
-              className="hover:underline text-blue-800 text-md"
+              className="hover:underline text-blue-800 text-md w-fit"
               href={`/dashboard/course/edit/${defaultValue?.course.id}`}
             >
               {defaultValue?.course.course_code} -{" "}
