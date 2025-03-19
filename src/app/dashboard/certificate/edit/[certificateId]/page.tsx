@@ -176,8 +176,7 @@ export default function Page({ params }: PageProps) {
               {defaultValue?.student.firstname_th}{" "}
               {defaultValue?.student.lastname_th} (
               {defaultValue?.student.firstname_en}{" "}
-              {defaultValue?.student.lastname_en}) (ใบประกาศ version{" "}
-              {defaultValue?.course.version})
+              {defaultValue?.student.lastname_en})
             </Link>
           </div>
           <div className="grid gap-2">
@@ -188,6 +187,7 @@ export default function Page({ params }: PageProps) {
             >
               {defaultValue?.course.course_code} -{" "}
               {defaultValue?.course.name_th} ({defaultValue?.course.name_en})
+              (ใบประกาศ version {defaultValue?.course.version})
             </Link>
           </div>
           <div className="grid gap-2">
