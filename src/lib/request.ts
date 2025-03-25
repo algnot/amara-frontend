@@ -4,7 +4,6 @@ import {
   AddStudentRequest,
   CourseResponse,
   ErrorResponse,
-  GetCertificatePDFRequest,
   GetCertificateResponse,
   ListCertificateResponse,
   ListCourseResponse,
@@ -46,22 +45,22 @@ const handlerError = (error: unknown): ErrorResponse => {
   }
 };
 
-const client: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_PATH,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
 export class BackendClient {
+  private readonly client: AxiosInstance;
+
+  constructor() {
+    this.client = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_BACKEND_PATH,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getItem("access_token")}`,
+      },
+    });
+  }
+
   async getUserInfo(): Promise<UserType | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await this.client.get("/auth/me");
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -85,12 +84,7 @@ export class BackendClient {
 
   async generateNewAccessToken(): Promise<ErrorResponse | void> {
     try {
-      const refreshToken = getItem("refresh_token");
-      const response = await client.get("/auth/generate-access-token", {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
+      const response = await this.client.get("/auth/generate-access-token");
       setItem("access_token", response.data.access_token);
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -103,10 +97,9 @@ export class BackendClient {
 
   async login(payload: LoginRequest): Promise<LoginResponse | ErrorResponse> {
     try {
-      const response = await client.post("/auth/login", payload);
+      const response = await this.client.post("/auth/login", payload);
       setItem("access_token", response.data.access_token);
       setItem("refresh_token", response.data.refresh_token);
-      await this.getUserInfo();
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -119,14 +112,8 @@ export class BackendClient {
     text: string
   ): Promise<ListSalePersonResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get(
-        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=sale_person`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
+      const response = await this.client.get(
+        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=sale_person`
       );
       return response.data;
     } catch (e) {
@@ -148,14 +135,8 @@ export class BackendClient {
     text: string
   ): Promise<ListStudentResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get(
+      const response = await this.client.get(
         `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=student`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
       );
       return response.data;
     } catch (e) {
@@ -175,7 +156,7 @@ export class BackendClient {
     payload: AddStudentRequest
   ): Promise<StudentResponse | ErrorResponse> {
     try {
-      const response = await client.post("/student/new", payload);
+      const response = await this.client.post("/student/new", payload);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -186,7 +167,7 @@ export class BackendClient {
     studentCode: string
   ): Promise<StudentResponse | ErrorResponse> {
     try {
-      const response = await client.get("/student/get/" + studentCode);
+      const response = await this.client.get("/student/get/" + studentCode);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -195,7 +176,7 @@ export class BackendClient {
 
   async getCourseById(id: string): Promise<CourseResponse | ErrorResponse> {
     try {
-      const response = await client.get("/course/get/" + id);
+      const response = await this.client.get("/course/get/" + id);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -208,15 +189,7 @@ export class BackendClient {
     text: string
   ): Promise<ListUserResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get(
-        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=user`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await this.client.get(`/data/list?limit=${limit}&offset=${offset}&text=${text}&model=user`);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -235,12 +208,7 @@ export class BackendClient {
     payload: AddSalePersonRequest
   ): Promise<SalePersonResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.post(`/sale-person/new`, payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await this.client.post(`/sale-person/new`, payload);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -257,7 +225,7 @@ export class BackendClient {
 
   async getSalePersonById(id: string): Promise<SalePerson | ErrorResponse> {
     try {
-      const response = await client.get("/sale-person/get/" + id);
+      const response = await this.client.get("/sale-person/get/" + id);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -269,7 +237,7 @@ export class BackendClient {
     payload: AddSalePersonRequest
   ): Promise<SalePerson | ErrorResponse> {
     try {
-      const response = await client.put("/sale-person/update/" + id, payload);
+      const response = await this.client.put("/sale-person/update/" + id, payload);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -281,7 +249,7 @@ export class BackendClient {
     payload: UpdateStudentRequest
   ): Promise<StudentResponse | ErrorResponse> {
     try {
-      const response = await client.put("/student/update/" + id, payload);
+      const response = await this.client.put("/student/update/" + id, payload);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -294,15 +262,7 @@ export class BackendClient {
     text: string
   ): Promise<ListCourseResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get(
-        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=course`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await this.client.get(`/data/list?limit=${limit}&offset=${offset}&text=${text}&model=course`);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -323,15 +283,7 @@ export class BackendClient {
     text: string
   ): Promise<ListCertificateResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get(
-        `/data/list?limit=${limit}&offset=${offset}&text=${text}&model=certificate`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await this.client.get(`/data/list?limit=${limit}&offset=${offset}&text=${text}&model=certificate`);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -352,15 +304,7 @@ export class BackendClient {
     text: string
   ): Promise<ListCertificateResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.get(
-        `/data/list?limit=${limit}&offset=${offset}&text=draft&model=certificate`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await this.client.get(`/data/list?limit=${limit}&offset=${offset}&text=draft&model=certificate`);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -379,12 +323,7 @@ export class BackendClient {
     payload: AddCourseRequest
   ): Promise<CourseResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.post(`/course/new`, payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await this.client.post(`/course/new`, payload);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -404,12 +343,7 @@ export class BackendClient {
     payload: AddCourseRequest
   ): Promise<CourseResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.put(`/course/update/${id}`, payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await this.client.put(`/course/update/${id}`, payload);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -428,12 +362,7 @@ export class BackendClient {
     payload: RequestCertificateRequest
   ): Promise<RequestCertificateResponse | ErrorResponse> {
     try {
-      const accessToken = getItem("access_token");
-      const response = await client.post(`/certificate/request`, payload, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await this.client.post(`/certificate/request`, payload);
       return response.data;
     } catch (e) {
       if (axios.isAxiosError(e) && e.status === 403) {
@@ -452,7 +381,18 @@ export class BackendClient {
     id: string
   ): Promise<GetCertificateResponse | ErrorResponse> {
     try {
-      const response = await client.get("/certificate/get/" + id);
+      const response = await this.client.get("/certificate/get/" + id);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getPublicCertificateById(
+    id: string
+  ): Promise<GetCertificateResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get("/certificate/get-certificate/" + id);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -463,7 +403,7 @@ export class BackendClient {
     id: string
   ): Promise<GetCertificateResponse | ErrorResponse> {
     try {
-      const response = await client.delete("/certificate/delete/" + id);
+      const response = await this.client.delete("/certificate/delete/" + id);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -475,21 +415,8 @@ export class BackendClient {
     payload: UpdateCertificateRequest
   ): Promise<GetCertificateResponse | ErrorResponse> {
     try {
-      const response = await client.put("/certificate/update/" + id, payload);
+      const response = await this.client.put("/certificate/update/" + id, payload);
       return response.data;
-    } catch (e) {
-      return handlerError(e);
-    }
-  }
-
-  async getCertificatePDF(
-    payload: GetCertificatePDFRequest
-  ): Promise<Buffer | ErrorResponse> {
-    try {
-      const response = await client.post("/pdf/fill", payload, {
-        responseType: "arraybuffer",
-      });
-      return Buffer.from(response.data);
     } catch (e) {
       return handlerError(e);
     }

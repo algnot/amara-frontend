@@ -25,7 +25,7 @@ export default function Page() {
         </Link>
       </div>
       <DataTable
-        fetchData={client.listSalePerson}
+        fetchData={(limit, offset, text) => client.listSalePerson(limit, offset, text)}
         columns={[
           { key: "reference_code", label: "รหัส" },
           { key: "firstname", label: "ชื่อ" },

@@ -25,7 +25,7 @@ export default function Page() {
         </Link>
       </div>
       <DataTable
-        fetchData={client.listCourse}
+        fetchData={(limit, offset, text) => client.listCourse(limit, offset, text)}
         columns={[
           { key: "course_code", label: "รหัสวิชา" },
           { key: "name_th", label: "ชื่อ (ไทย)" },

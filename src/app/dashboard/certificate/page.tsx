@@ -18,7 +18,7 @@ export default function Page() {
   return (
     <div className="container mx-auto py-10 px-5">
       <DataTable
-        fetchData={client.listCertificate}
+        fetchData={(limit, offset, text) => client.listCertificate(limit, offset, text)}
         columns={[
           { key: "certificate_number", label: "เลขที่ใบประกาศ" },
           { key: "batch", label: "รุ่นที่" },

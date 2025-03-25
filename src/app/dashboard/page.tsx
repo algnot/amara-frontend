@@ -18,7 +18,7 @@ export default function Page() {
   return (
     <div className="container mx-auto py-10 px-5">
       <DataTable
-        fetchData={client.listStudent}
+        fetchData={(limit, offset, text) => client.listStudent(limit, offset, text)}
         columns={[
           { key: "student_id", label: "รหัสนักเรียน" },
           { key: "firstname_th", label: "ชื่อ (ไทย)" },

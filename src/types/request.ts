@@ -203,9 +203,3 @@ export interface GetCertificateParamRequest {
   certificate_date: string;
   date: string;
 }
-
-export interface GetCertificatePDFRequest {
-  url: string;
-  params: GetCertificateParamRequest;
-  lang: "th" | "en";
-}
