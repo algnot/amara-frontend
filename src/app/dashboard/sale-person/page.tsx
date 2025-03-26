@@ -34,7 +34,7 @@ export default function Page() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "course_data.csv";
+    a.download = "sale_person_data.csv";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
