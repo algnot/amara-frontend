@@ -421,4 +421,40 @@ export class BackendClient {
       return handlerError(e);
     }
   }
+
+  async exportStudentCSV(): Promise<string | ErrorResponse> {
+    try {
+      const response = await this.client.get("/export/student");
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async exportCertificateCSV(): Promise<string | ErrorResponse> {
+    try {
+      const response = await this.client.get("/export/certificate");
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async exportCourseCSV(): Promise<string | ErrorResponse> {
+    try {
+      const response = await this.client.get("/export/course");
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async exportSalePersonCSV(): Promise<string | ErrorResponse> {
+    try {
+      const response = await this.client.get("/export/sale-person");
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
 }

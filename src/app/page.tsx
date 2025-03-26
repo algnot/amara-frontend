@@ -33,9 +33,6 @@ export default function Page() {
   const [lastnameEN, setLastnameEN] = useState<string>("");
   const [refCode, setRefCode] = useState<string>("");
 
-  // const [prefix, setPrefix] = useState<"นาย" | "นาง" | "นางสาว" | "">("");
-  // const [school, setSchool] = useState<"นวดไทย" | "">("");
-
   const onSubmit = async () => {
     setFullLoading(true);
     const response = await client.addNewStudent({
