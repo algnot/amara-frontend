@@ -9,6 +9,7 @@ import { isErrorResponse } from "@/types/request";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
+
 export default function Page() {
   const setLoading = useFullLoadingContext();
   const setNavigation = useNavigateContext();
