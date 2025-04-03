@@ -57,6 +57,18 @@ export interface ListUserResponse {
   datas: UserType[];
 }
 
+export interface ListPermissionResponse {
+  next: number;
+  datas: Permission[];
+}
+
+export interface Permission {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
+}
+
 export interface ListStudentResponse {
   next: number;
   datas: StudentResponse[];
@@ -105,6 +117,19 @@ export interface StudentResponse {
   student_id: string;
   sale_person: string;
   certificate: GetCertificateResponse[];
+}
+
+export interface AddPermissionRequest {
+  key: string;
+  name: string;
+  description: string;
+}
+
+export interface AddPermissionResponse {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
 }
 
 export interface AddSalePersonRequest {

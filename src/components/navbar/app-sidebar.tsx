@@ -38,10 +38,6 @@ const navUser = [
     icon: NotebookText,
     isActive: true,
     items: [
-      // {
-      //   title: "สถาบัน",
-      //   url: "/dashboard/school",
-      // },
       {
         title: "หลักสูตร",
         url: "/dashboard/course",
@@ -49,7 +45,7 @@ const navUser = [
       {
         title: "พนักงานขาย",
         url: "/dashboard/sale-person",
-      }
+      },
     ],
   },
 ];
@@ -64,13 +60,16 @@ const navAdmin = [
       {
         title: "ผู้ใช้งานทั้งหมด",
         url: "/dashboard/admin/users",
-      }
+      },
+      {
+        title: "สิทธิ์การเข้าถึง",
+        url: "/dashboard/admin/permission",
+      },
     ],
-  }
+  },
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarContent className="pt-5">

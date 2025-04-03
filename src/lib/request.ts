@@ -1,5 +1,7 @@
 import {
   AddCourseRequest,
+  AddPermissionRequest,
+  AddPermissionResponse,
   AddSalePersonRequest,
   AddStudentRequest,
   CourseResponse,
@@ -7,6 +9,7 @@ import {
   GetCertificateResponse,
   ListCertificateResponse,
   ListCourseResponse,
+  ListPermissionResponse,
   ListSalePersonResponse,
   ListStudentResponse,
   ListUserResponse,
@@ -163,6 +166,17 @@ export class BackendClient {
     }
   }
 
+  async addNewPermission(
+    payload: AddPermissionRequest
+  ): Promise<AddPermissionResponse | ErrorResponse> {
+    try {
+      const response = await this.client.post("/permission/new", payload);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
   async getStudentByStudentCode(
     studentCode: string
   ): Promise<StudentResponse | ErrorResponse> {
@@ -177,6 +191,15 @@ export class BackendClient {
   async getCourseById(id: string): Promise<CourseResponse | ErrorResponse> {
     try {
       const response = await this.client.get("/course/get/" + id);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getPermissionById(id: string): Promise<AddPermissionResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get("/permission/get/" + id);
       return response.data;
     } catch (e) {
       return handlerError(e);
@@ -198,6 +221,27 @@ export class BackendClient {
         if (refreshToken) {
           await this.generateNewAccessToken();
           return this.listUser(limit, offset, text);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async listPermission(
+    limit: number,
+    offset: number | "",
+    text: string
+  ): Promise<ListPermissionResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get(`/data/list?limit=${limit}&offset=${offset}&text=${text}&model=permission`);
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.listPermission(limit, offset, text);
         }
       }
       return handlerError(e);
@@ -238,6 +282,18 @@ export class BackendClient {
   ): Promise<SalePerson | ErrorResponse> {
     try {
       const response = await this.client.put("/sale-person/update/" + id, payload);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async updatePermissionById(
+    id: string,
+    payload: AddPermissionRequest
+  ): Promise<AddPermissionResponse | ErrorResponse> {
+    try {
+      const response = await this.client.put("/permission/update/" + id, payload);
       return response.data;
     } catch (e) {
       return handlerError(e);
