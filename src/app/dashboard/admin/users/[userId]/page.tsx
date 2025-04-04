@@ -136,11 +136,6 @@ export default function Page({ params }: PageProps) {
 
     setSelectedPermissions(userResponse.permissions);
     setDefaultValue(userResponse);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchData();
     setNavigation(
       [
         {
@@ -148,8 +143,13 @@ export default function Page({ params }: PageProps) {
           path: "/dashboard/admin/users",
         },
       ],
-      "เพิ่มผู้ใช้งาน"
+      userResponse.username
     );
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -178,7 +178,7 @@ export default function Page({ params }: PageProps) {
 
   return (
     <div className="m-6">
-      <div className="mb-4">เพิ่มผู้ใช้งาน</div>
+      <div className="mb-4">{defaultValue?.username ?? ""}</div>
       <form className="p-6 border rounded-lg" ref={formRef} onSubmit={onSubmit}>
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">

@@ -87,6 +87,7 @@ export interface UserType {
   role: "USER" | "ADMIN" | "SUPER_ADMIN";
   image_url: string;
   uid: number;
+  permissions: string[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
