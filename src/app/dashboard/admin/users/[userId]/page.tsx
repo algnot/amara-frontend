@@ -77,7 +77,7 @@ export default function Page({ params }: PageProps) {
     const form = formRef.current;
     const username = form?.username?.value ?? "";
     const email = form?.email?.value ?? "";
-    const password = form?.password?.value ?? "";
+    const password = form?.newPassword?.value ?? "";
     const confirmPassword = form?.confirmPassword?.value ?? "";
     const role = selectedRole?.value ?? "";
     const permissions = selectedPermissions;
