@@ -43,23 +43,16 @@ export default function Page() {
       return;
     }
 
-    setAlert(
-      "เข้าสู่ระบบสำเร็จ",
-      `ยินดีต้อนรับ ${response.username} :)`,
-      () => {
-        window.location.href = "/dashboard";
-      },
-      false
-    );
+    window.location.href = "/dashboard";
   };
 
   useEffect(() => {
-    if(user !== null) {
-      if(user.uid !== 0) {
+    if (user !== null) {
+      if (user.uid !== 0) {
         window.location.href = "/dashboard";
       }
     }
-  },[user])
+  }, [user]);
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-blue-300">
