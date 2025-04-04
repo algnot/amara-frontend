@@ -82,6 +82,7 @@ export class BackendClient {
           role: "USER",
           image_url: "",
           uid: 0,
+          permissions: [],
         };
       }
       return handlerError(e);
