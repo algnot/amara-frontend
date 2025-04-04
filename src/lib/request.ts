@@ -5,6 +5,8 @@ import {
   AddSalePersonRequest,
   AddStudentRequest,
   CourseResponse,
+  CreateUserRequest,
+  CreateUserResponse,
   ErrorResponse,
   GetCertificateResponse,
   ListCertificateResponse,
@@ -22,6 +24,7 @@ import {
   StudentResponse,
   UpdateCertificateRequest,
   UpdateStudentRequest,
+  UpdateUserRequest,
   UserType,
 } from "@/types/request";
 import axios, { AxiosInstance } from "axios";
@@ -388,6 +391,64 @@ export class BackendClient {
         if (refreshToken) {
           await this.generateNewAccessToken();
           return this.addNewCourse(payload);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async createUser(
+    payload: CreateUserRequest
+  ): Promise<CreateUserResponse | ErrorResponse> {
+    try {
+      const response = await this.client.post(`/user/create`, payload);
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.createUser(payload);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async updateUserById(
+    id: string,
+    payload: UpdateUserRequest
+  ): Promise<CreateUserResponse | ErrorResponse> {
+    try {
+      const response = await this.client.put(`/user/update/${id}`, payload);
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.updateUserById(id, payload);
+        }
+      }
+      return handlerError(e);
+    }
+  }
+
+  async getUserById(
+    id: string
+  ): Promise<CreateUserResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get(`/user/get/` + id);
+      return response.data;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.status === 403) {
+        removeItem("access_token");
+        const refreshToken = getItem("refresh_token");
+        if (refreshToken) {
+          await this.generateNewAccessToken();
+          return this.getUserById(id);
         }
       }
       return handlerError(e);

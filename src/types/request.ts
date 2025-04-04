@@ -228,3 +228,28 @@ export interface GetCertificateParamRequest {
   certificate_date: string;
   date: string;
 }
+
+export interface CreateUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+  permissions: number[];
+}
+
+export interface UpdateUserRequest {
+  username: string;
+  email: string;
+  password?: string;
+  role: string;
+  permissions: number[];
+}
+
+export interface CreateUserResponse {
+  username: string;
+  email: string;
+  image_url: string;
+  role: string;
+  permissions: number[];
+  user_id: number;
+}

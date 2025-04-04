@@ -125,7 +125,7 @@ export default function Page() {
               required
             />
           </div>
-          <div className="grid gap-2 mt-4">
+          <div className="grid gap-2">
             <Label>Version ใบประกาศ</Label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -162,8 +162,8 @@ export default function Page() {
             </DropdownMenu>
           </div>
           <div className="flex justify-between items-center">
-            <div className=""></div>
-            <div className="">
+            <div></div>
+            <div>
               <Button type="submit" className="w-full">
                 เพิ่มหลักสูตร
               </Button>

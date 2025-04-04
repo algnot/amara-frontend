@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { BackendClient } from "@/lib/request";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { DataTable } from "@/components/datatable/datatable";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const setLoading = useFullLoadingContext();
@@ -17,6 +18,15 @@ export default function Page() {
 
   return (
     <div className="container mx-auto py-10 px-5">
+      <div className="flex justify-end">
+        <Button
+          onClick={() => {
+            window.location.href = "/dashboard/admin/users/create";
+          }}
+        >
+          เพิ่มผู้ใช้งาน
+        </Button>
+      </div>
       <DataTable
         fetchData={(limit, offset, text) =>
           client.listUser(limit, offset, text)
