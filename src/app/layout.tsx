@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={baseFont.className}>
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <Suspense fallback={<div></div>}>
             <UserProvider>
               <AlertDialogProvider>

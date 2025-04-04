@@ -15,7 +15,6 @@ export function ThemeProvider({
           <p>Env: {process.env.NODE_ENV}</p>
         </div>
       )}
-      <div></div>
       <NextThemesProvider {...props}>{children}</NextThemesProvider>
     </>
   );
