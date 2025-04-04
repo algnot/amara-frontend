@@ -118,6 +118,7 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="นามสกุล"
               defaultValue={defaultValue?.lastname}
+              disabled={!user?.permissions?.includes("modify-sale-person-data")}
               required
             />
           </div>
