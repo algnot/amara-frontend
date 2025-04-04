@@ -3,6 +3,7 @@
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +29,7 @@ export interface Version {
 
 export default function Page({ params }: PageProps) {
   const client = new BackendClient();
+  const user = useUserContext();
   const setAlert = useAlertContext();
   const setNavigation = useNavigateContext();
   const setFullLoading = useFullLoadingContext();
@@ -125,11 +127,6 @@ export default function Page({ params }: PageProps) {
     <form ref={formRef} onSubmit={onSubmit} className="m-6">
       <div className="flex justify-between items-center mb-6 ">
         <div className="ml-4">{defaultValue?.name_th}</div>
-        {/* <div className="">
-          <Button type="submit" className="w-full">
-            เพิ่มพนักงานขาย
-          </Button>
-        </div> */}
       </div>
       <div className="p-6 border rounded-lg">
         <div className="flex flex-col gap-6">
@@ -141,6 +138,7 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="รหัสวิชา"
               defaultValue={defaultValue?.course_code}
+              disabled={!user?.permissions?.includes("modify-course-data")}
               required
             />
           </div>
@@ -152,6 +150,7 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="ชื่อหลักสูตร (ไทย)"
               defaultValue={defaultValue?.name_th}
+              disabled={!user?.permissions?.includes("modify-course-data")}
               required
             />
           </div>
@@ -163,6 +162,7 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="ชื่อหลักสูตร (อังกฤษ)"
               defaultValue={defaultValue?.name_en}
+              disabled={!user?.permissions?.includes("modify-course-data")}
               required
             />
           </div>
@@ -172,6 +172,7 @@ export default function Page({ params }: PageProps) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
+                  disabled={!user?.permissions?.includes("modify-course-data")}
                   className={`flex justify-between ${
                     selectedVersion == null && "text-gray-400"
                   }`}
@@ -205,9 +206,11 @@ export default function Page({ params }: PageProps) {
           <div className="flex justify-between items-center">
             <div className=""></div>
             <div className="">
-              <Button type="submit" className="w-full">
-                อัพเดทหลักสูตร
-              </Button>
+              {user?.permissions?.includes("modify-course-data") && (
+                <Button type="submit" className="w-full">
+                  อัพเดทหลักสูตร
+                </Button>
+              )}
             </div>
           </div>
         </div>

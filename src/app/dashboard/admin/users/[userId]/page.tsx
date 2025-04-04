@@ -240,21 +240,23 @@ export default function Page({ params }: PageProps) {
           <div className="grid gap-2">
             <Label className="mb-2">สิทธิ์การใช้งาน</Label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {permissionDatas?.datas.map((value) => {
-                const handleChange = (checked: boolean) => {
-                  setSelectedPermissions((prev) =>
-                    checked
-                      ? [...prev, Number(value.id)]
-                      : prev.filter((id) => id !== Number(value.id))
-                  );
-                };
+              {permissionDatas?.datas
+                ?.sort((a, b) => a.name.localeCompare(b.name))
+                .map((value) => {
+                  const handleChange = (checked: boolean) => {
+                    setSelectedPermissions((prev) =>
+                      checked
+                        ? [...prev, Number(value.id)]
+                        : prev.filter((id) => id !== Number(value.id))
+                    );
+                  };
 
-                return renderPermissionCheckbox(
-                  value,
-                  selectedPermissions,
-                  handleChange
-                );
-              })}
+                  return renderPermissionCheckbox(
+                    value,
+                    selectedPermissions,
+                    handleChange
+                  );
+                })}
             </div>
           </div>
           {isChangePassword && (

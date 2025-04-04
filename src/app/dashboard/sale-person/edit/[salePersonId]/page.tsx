@@ -2,6 +2,7 @@
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +17,7 @@ type PageProps = {
 export default function Page({ params }: PageProps) {
   const client = new BackendClient();
   const setAlert = useAlertContext();
+  const user = useUserContext();
   const setNavigation = useNavigateContext();
   const setFullLoading = useFullLoadingContext();
   const setLoading = useFullLoadingContext();
@@ -93,11 +95,6 @@ export default function Page({ params }: PageProps) {
     <form ref={formRef} onSubmit={onSubmit} className="m-6">
       <div className="flex justify-between items-center mb-6 ">
         <div className="ml-4">{defaultValue?.firstname} {defaultValue?.lastname}</div>
-        {/* <div className="">
-          <Button type="submit" className="w-full">
-            เพิ่มพนักงานขาย
-          </Button>
-        </div> */}
       </div>
       <div className="p-6 border rounded-lg">
         <div className="flex flex-col gap-6">
@@ -109,6 +106,7 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="ชื่อ"
               defaultValue={defaultValue?.firstname}
+              disabled={!user?.permissions?.includes("modify-sale-person-data")}
               required
             />
           </div>
@@ -131,15 +129,18 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="รหัสผู้ขาย"
               defaultValue={defaultValue?.reference_code}
+              disabled={!user?.permissions?.includes("modify-sale-person-data")}
               required
             />
           </div>
           <div className="flex justify-between items-center">
             <div className=""></div>
             <div className="">
-              <Button type="submit" className="w-full">
-                บันทึกข้อมูล
-              </Button>
+              {user?.permissions?.includes("modify-sale-person-data") && (
+                <Button type="submit" className="w-full">
+                  บันทึกข้อมูล
+                </Button>
+              )}
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BackendClient } from "@/lib/request";
@@ -19,6 +20,7 @@ export default function Page({ params }: PageProps) {
   const setAlert = useAlertContext();
   const setNavigation = useNavigateContext();
   const setLoading = useFullLoadingContext();
+  const user = useUserContext();
   const [defaultValue, setDefaultValue] = useState<GetCertificateResponse>();
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -208,6 +210,7 @@ export default function Page({ params }: PageProps) {
                       .split("T")[0]
                   : ""
               }
+              disabled={!user?.permissions?.includes("modify-certificate-data")}
               required
             />
           </div>
@@ -223,6 +226,7 @@ export default function Page({ params }: PageProps) {
                   ? new Date(defaultValue.end_date).toISOString().split("T")[0]
                   : ""
               }
+              disabled={!user?.permissions?.includes("modify-certificate-data")}
               required
             />
           </div>
@@ -240,6 +244,7 @@ export default function Page({ params }: PageProps) {
                       .split("T")[0]
                   : ""
               }
+              disabled={!user?.permissions?.includes("modify-certificate-data")}
               required
             />
           </div>
@@ -251,26 +256,29 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="รุ่นที่"
               defaultValue={defaultValue?.batch}
+              disabled={!user?.permissions?.includes("modify-certificate-data")}
               required
             />
           </div>
-          <div className="flex justify-between items-center mt-4">
-            <div>
-              <Button
-                type="button"
-                onClick={onArchive}
-                className="w-full"
-                variant="destructive"
-              >
-                ลบใบประกาศ
-              </Button>
+          {user?.permissions?.includes("modify-certificate-data") && (
+            <div className="flex justify-between items-center mt-4">
+              <div>
+                <Button
+                  type="button"
+                  onClick={onArchive}
+                  className="w-full"
+                  variant="destructive"
+                >
+                  ลบใบประกาศ
+                </Button>
+              </div>
+              <div>
+                <Button type="submit" className="w-full">
+                  บันทึกข้อมูล
+                </Button>
+              </div>
             </div>
-            <div>
-              <Button type="submit" className="w-full">
-                บันทึกข้อมูล
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
       </form>
     </div>

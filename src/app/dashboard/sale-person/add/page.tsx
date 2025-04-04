@@ -2,6 +2,7 @@
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,7 @@ import React, { FormEvent, useEffect, useRef } from "react";
 
 export default function Page() {
   const client = new BackendClient();
+  const user = useUserContext();
   const setAlert = useAlertContext();
   const setNavigation = useNavigateContext();
   const setFullLoading = useFullLoadingContext();
@@ -34,16 +36,16 @@ export default function Page() {
       setFullLoading(false);
       setAlert("ผิดพลาด", response.message, 0, true);
       return;
-    }   
+    }
 
     setAlert(
-        "เพิ่มข้อมูลสำเร็จ",
-        "ระบบเพิ่มข้อมูลให้คุณเรียบร้อยแล้ว",
-        () => {
-          window.location.href = "/dashboard/sale-person";
-        },
-        false
-      );
+      "เพิ่มข้อมูลสำเร็จ",
+      "ระบบเพิ่มข้อมูลให้คุณเรียบร้อยแล้ว",
+      () => {
+        window.location.href = "/dashboard/sale-person";
+      },
+      false
+    );
   };
 
   useEffect(() => {
@@ -63,11 +65,6 @@ export default function Page() {
     <form ref={formRef} onSubmit={onSubmit} className="m-6">
       <div className="flex justify-between items-center mb-6 ">
         <div className="ml-4">เพิ่มพนักงานขาย</div>
-        {/* <div className="">
-          <Button type="submit" className="w-full">
-            เพิ่มพนักงานขาย
-          </Button>
-        </div> */}
       </div>
       <div className="p-6 border rounded-lg">
         <div className="flex flex-col gap-6">
@@ -78,6 +75,7 @@ export default function Page() {
               name="firstname"
               type="text"
               placeholder="ชื่อ"
+              disabled={!user?.permissions?.includes("modify-sale-person-data")}
               required
             />
           </div>
@@ -88,6 +86,7 @@ export default function Page() {
               name="lastname"
               type="text"
               placeholder="นามสกุล"
+              disabled={!user?.permissions?.includes("modify-sale-person-data")}
               required
             />
           </div>
@@ -98,15 +97,18 @@ export default function Page() {
               name="code"
               type="text"
               placeholder="รหัสผู้ขาย"
+              disabled={!user?.permissions?.includes("modify-sale-person-data")}
               required
             />
           </div>
           <div className="flex justify-between items-center">
             <div className=""></div>
             <div className="">
-              <Button type="submit" className="w-full">
-                เพิ่มพนักงานขาย
-              </Button>
+              {user?.permissions?.includes("modify-sale-person-data") && (
+                <Button type="submit" className="w-full">
+                  เพิ่มพนักงานขาย
+                </Button>
+              )}
             </div>
           </div>
         </div>

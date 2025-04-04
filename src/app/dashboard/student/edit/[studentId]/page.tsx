@@ -2,6 +2,7 @@
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +21,7 @@ export default function Page({ params }: PageProps) {
   const setNavigation = useNavigateContext();
   const setFullLoading = useFullLoadingContext();
   const setLoading = useFullLoadingContext();
+  const user = useUserContext();
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const [defaultValue, setDefaultValue] = useState<StudentResponse>();
@@ -131,6 +133,7 @@ export default function Page({ params }: PageProps) {
                 type="text"
                 placeholder="ชื่อ (ไทย)"
                 defaultValue={defaultValue?.firstname_th}
+                disabled={!user?.permissions?.includes("modify-student-data")}
                 required
               />
             </div>
@@ -142,6 +145,7 @@ export default function Page({ params }: PageProps) {
                 type="text"
                 placeholder="นามสกุล (ไทย)"
                 defaultValue={defaultValue?.lastname_th}
+                disabled={!user?.permissions?.includes("modify-student-data")}
                 required
               />
             </div>
@@ -153,6 +157,7 @@ export default function Page({ params }: PageProps) {
                 type="text"
                 placeholder="ชื่อ (ไทย)"
                 defaultValue={defaultValue?.firstname_en}
+                disabled={!user?.permissions?.includes("modify-student-data")}
                 required
               />
             </div>
@@ -164,6 +169,7 @@ export default function Page({ params }: PageProps) {
                 type="text"
                 placeholder="นามสกุล (ไทย)"
                 defaultValue={defaultValue?.lastname_en}
+                disabled={!user?.permissions?.includes("modify-student-data")}
                 required
               />
             </div>
@@ -178,9 +184,11 @@ export default function Page({ params }: PageProps) {
             <div className="flex justify-between items-center">
               <div className=""></div>
               <div className="">
-                <Button type="submit" className="w-full">
-                  บันทึกข้อมูล
-                </Button>
+                {user?.permissions?.includes("modify-student-data") && (
+                  <Button type="submit" className="w-full">
+                    บันทึกข้อมูล
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -189,15 +197,17 @@ export default function Page({ params }: PageProps) {
       <div className="p-6 border rounded-lg m-6">
         <div className="flex flex-col gap-3">
           <div>ใบประกาศ</div>
-          {
-            defaultValue?.certificate.map((value, index) => {
-              return (
-                <Link key={index} className="border rounded-lg p-2 cursor-pointer" href={`/dashboard/certificate/edit/${value.certificate_number}`}>
-                  {value.certificate_number} - {value.course.name_th}
-                </Link>
-              )
-            })
-          }
+          {defaultValue?.certificate.map((value, index) => {
+            return (
+              <Link
+                key={index}
+                className="border rounded-lg p-2 cursor-pointer"
+                href={`/dashboard/certificate/edit/${value.certificate_number}`}
+              >
+                {value.certificate_number} - {value.course.name_th}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </>

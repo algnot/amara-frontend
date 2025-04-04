@@ -2,6 +2,7 @@
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,6 +26,7 @@ export default function Page() {
   const setAlert = useAlertContext();
   const setNavigation = useNavigateContext();
   const setFullLoading = useFullLoadingContext();
+  const user = useUserContext();
   const formRef = useRef<HTMLFormElement | null>(null);
 
   const [allVersion] = useState<Version[]>([
@@ -102,6 +104,7 @@ export default function Page() {
               name="course_code"
               type="text"
               placeholder="รหัสวิชา"
+              disabled={!user?.permissions?.includes("modify-course-data")}
               required
             />
           </div>
@@ -112,6 +115,7 @@ export default function Page() {
               name="name_th"
               type="text"
               placeholder="ชื่อหลักสูตร (ไทย)"
+              disabled={!user?.permissions?.includes("modify-course-data")}
               required
             />
           </div>
@@ -122,6 +126,7 @@ export default function Page() {
               name="name_en"
               type="text"
               placeholder="ชื่อหลักสูตร (อังกฤษ)"
+              disabled={!user?.permissions?.includes("modify-course-data")}
               required
             />
           </div>
@@ -130,6 +135,7 @@ export default function Page() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
+                  disabled={!user?.permissions?.includes("modify-course-data")}
                   variant="outline"
                   className={`flex justify-between ${
                     selectedVersion == null && "text-gray-400"
@@ -164,9 +170,11 @@ export default function Page() {
           <div className="flex justify-between items-center">
             <div></div>
             <div>
-              <Button type="submit" className="w-full">
-                เพิ่มหลักสูตร
-              </Button>
+              {user?.permissions?.includes("modify-course-data") && (
+                <Button type="submit" className="w-full">
+                  เพิ่มหลักสูตร
+                </Button>
+              )}
             </div>
           </div>
         </div>

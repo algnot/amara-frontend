@@ -37,11 +37,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }
 
     if (user.permissions.includes("read-certificate-data")) {
-      studentItems.push({ title: "คำขอใบประกาศ", url: "/dashboard" });
+      studentItems.push({
+        title: "คำขอใบประกาศ",
+        url: "/dashboard/draft-certificate",
+      });
     }
 
     if (user.permissions.includes("read-certificate-data")) {
-      studentItems.push({ title: "ใบประกาศทั้งหมด", url: "/dashboard" });
+      studentItems.push({
+        title: "ใบประกาศทั้งหมด",
+        url: "/dashboard/certificate",
+      });
     }
 
     if (user.permissions.includes("read-course-data")) {

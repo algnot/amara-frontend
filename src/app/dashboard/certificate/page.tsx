@@ -3,6 +3,7 @@ import { DataTable } from "@/components/datatable/datatable";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
+import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
 import { BackendClient } from "@/lib/request";
 import { isErrorResponse } from "@/types/request";
@@ -13,6 +14,7 @@ export default function Page() {
   const setNavigation = useNavigateContext();
   const setAlert = useAlertContext();
   const client = new BackendClient();
+  const user = useUserContext();
 
   useEffect(() => {
     setLoading(false);
@@ -43,9 +45,11 @@ export default function Page() {
 
   return (
     <div className="container mx-auto py-10 px-5">
-      <div className="flex justify-end">
-        <Button onClick={exportPdf}>Export ข้อมูลใบประกาศ</Button>
-      </div>
+      {user?.permissions?.includes("export-certificate-data") && (
+        <div className="flex justify-end">
+          <Button onClick={exportPdf}>Export ข้อมูลใบประกาศ</Button>
+        </div>
+      )}
       <DataTable
         fetchData={(limit, offset, text) =>
           client.listCertificate(limit, offset, text)
