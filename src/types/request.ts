@@ -63,7 +63,7 @@ export interface ListPermissionResponse {
 }
 
 export interface Permission {
-  id: string;
+  id: number;
   key: string;
   name: string;
   description: string;

@@ -250,8 +250,8 @@ export default function Page({ params }: PageProps) {
                 const handleChange = (checked: boolean) => {
                     setSelectedPermissions((prev) =>
                       checked
-                        ? [...prev, Number(value.id)] // Ensure `value.id` is a number
-                        : prev.filter((id) => id !== Number(value.id)) // Convert `value.id` to a number for comparison
+                        ? [...prev, Number(value.id)]
+                        : prev.filter((id) => id !== Number(value.id)) 
                     );
                   };
 
