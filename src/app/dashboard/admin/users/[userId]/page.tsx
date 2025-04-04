@@ -248,12 +248,12 @@ export default function Page({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {permissionDatas?.datas.map((value) => {
                 const handleChange = (checked: boolean) => {
-                  setSelectedPermissions((prev) =>
-                    checked
-                      ? [...prev, value.id]
-                      : prev.filter((id) => id !== value.id)
-                  );
-                };
+                    setSelectedPermissions((prev) =>
+                      checked
+                        ? [...prev, Number(value.id)] // Ensure `value.id` is a number
+                        : prev.filter((id) => id !== Number(value.id)) // Convert `value.id` to a number for comparison
+                    );
+                  };
 
                 return renderPermissionCheckbox(
                   value,
