@@ -78,18 +78,12 @@ export default function Page({ params }: PageProps) {
     const username = form?.username?.value ?? "";
     const email = form?.email?.value ?? "";
     const password = form?.newPassword?.value ?? "";
-    const confirmPassword = form?.confirmPassword?.value ?? "";
     const role = selectedRole?.value ?? "";
     const permissions = selectedPermissions;
     const { userId } = await params;
     const userID = Array.isArray(userId) ? userId[0] : userId;
 
     setLoading(true);
-    if (password !== confirmPassword) {
-      setAlert("ผิดพลาด", "รหัสผ่านไม่ตรงกัน", 0, true);
-      setLoading(false);
-      return;
-    }
 
     const paylaod: UpdateUserRequest = {
       username: username,
@@ -248,12 +242,12 @@ export default function Page({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {permissionDatas?.datas.map((value) => {
                 const handleChange = (checked: boolean) => {
-                    setSelectedPermissions((prev) =>
-                      checked
-                        ? [...prev, Number(value.id)]
-                        : prev.filter((id) => id !== Number(value.id)) 
-                    );
-                  };
+                  setSelectedPermissions((prev) =>
+                    checked
+                      ? [...prev, Number(value.id)]
+                      : prev.filter((id) => id !== Number(value.id))
+                  );
+                };
 
                 return renderPermissionCheckbox(
                   value,
