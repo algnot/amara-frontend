@@ -33,7 +33,7 @@ export default function Page() {
         }
         columns={[
           { key: "uid", label: "ID" },
-          { key: "email", label: "Email" },
+          { key: "email", label: "Login" },
           { key: "username", label: "Name" },
           { key: "role", label: "Role" },
         ]}

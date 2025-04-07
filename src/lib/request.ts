@@ -8,6 +8,7 @@ import {
   CreateUserRequest,
   CreateUserResponse,
   ErrorResponse,
+  GenerateStudentUserByIdResponse,
   GetCertificateResponse,
   ListCertificateResponse,
   ListCourseResponse,
@@ -310,6 +311,17 @@ export class BackendClient {
   ): Promise<StudentResponse | ErrorResponse> {
     try {
       const response = await this.client.put("/student/update/" + id, payload);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async generateStudentUserById(
+    id: string,
+  ): Promise<GenerateStudentUserByIdResponse | ErrorResponse> {
+    try {
+      const response = await this.client.post("/student/generate-user/" + id);
       return response.data;
     } catch (e) {
       return handlerError(e);

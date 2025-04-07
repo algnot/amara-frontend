@@ -30,8 +30,8 @@ export function AlertDialogComponent({
   onCancel: () => void;
   canCancel: boolean;
 }) {
-  const handleActionClick = () => {    
-    if (typeof action !== "number") {      
+  const handleActionClick = () => {
+    if (typeof action !== "number") {
       action();
     }
     onCancel();
@@ -42,7 +42,9 @@ export function AlertDialogComponent({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{text}</AlertDialogDescription>
+          <AlertDialogDescription>
+            <span dangerouslySetInnerHTML={{ __html: text }} />
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           {canCancel && (

@@ -11,7 +11,7 @@ export const isErrorResponse = (data: any): data is ErrorResponse => {
 export interface GetUserInfoResponse {
   email: string;
   image_url: string;
-  role: "USER" | "ADMIN" | "SUPER_ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN" | "STUDENT";
   user_id: number;
   username: string;
 }
@@ -27,7 +27,7 @@ export interface SignUpResponse {
   email: string;
   image_url: string;
   refresh_token: string;
-  role: "USER" | "ADMIN" | "SUPER_ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN" | "STUDENT";
   user_id: number;
   username: string;
 }
@@ -42,7 +42,7 @@ export interface LoginResponse {
   email: string;
   image_url: string;
   refresh_token: string;
-  role: "USER" | "ADMIN" | "SUPER_ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN" | "STUDENT";
   user_id: number;
   username: string;
 }
@@ -84,7 +84,7 @@ export interface SalePerson {
 export interface UserType {
   email: string;
   username: string;
-  role: "USER" | "ADMIN" | "SUPER_ADMIN";
+  role: "USER" | "ADMIN" | "SUPER_ADMIN" | "STUDENT";
   image_url: string;
   uid: number;
   permissions: string[];
@@ -118,6 +118,12 @@ export interface StudentResponse {
   student_id: string;
   sale_person: string;
   certificate: GetCertificateResponse[];
+  user_id: number;
+}
+
+export interface GenerateStudentUserByIdResponse {
+  login: string;
+  password: string;
 }
 
 export interface AddPermissionRequest {

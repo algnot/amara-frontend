@@ -43,7 +43,11 @@ export default function Page() {
       return;
     }
 
-    window.location.href = "/dashboard";
+    if (response.role === "ADMIN" || response.role === "SUPER_ADMIN" || response.role === "USER") {
+      window.location.href = "/dashboard";
+    } else {
+      window.location.href = "/student/dashboard";
+    }
   };
 
   useEffect(() => {
@@ -77,11 +81,11 @@ export default function Page() {
               <form ref={formRef} onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">อีเมล</Label>
+                    <Label htmlFor="email">อีเมลหรือรหัสนักเรียน</Label>
                     <Input
                       id="email"
                       name="email"
-                      type="email"
+                      type="text"
                       placeholder="amara@amara.com"
                       required
                     />

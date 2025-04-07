@@ -1,10 +1,9 @@
-"use client"
+"use client";
 import { AppSidebar } from "@/components/navbar/app-sidebar";
 import NavigationProvider from "@/components/provider/navigation-provider";
 import { useUserContext } from "@/components/provider/user-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useEffect } from "react";
-
 
 export default function RootLayout({
   children,
@@ -13,18 +12,18 @@ export default function RootLayout({
 }>) {
   const user = useUserContext();
   useEffect(() => {
-    if(user?.uid == 0) {
-      window.location.href = "/login"
+    if (user?.uid == 0) {
+      window.location.href = "/login";
+    } else if (user?.role === "STUDENT") {
+      window.location.href = "/student/dashboard";
     }
-  }, [user])
+  }, [user]);
 
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <NavigationProvider>
-          {children}
-        </NavigationProvider>
+        <NavigationProvider>{children}</NavigationProvider>
       </SidebarInset>
     </SidebarProvider>
   );

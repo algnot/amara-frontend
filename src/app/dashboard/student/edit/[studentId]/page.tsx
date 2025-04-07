@@ -83,6 +83,29 @@ export default function Page({ params }: PageProps) {
     setDefaultValue(response);
   };
 
+  const onGenerateStudentUserById = async () => {
+    setLoading(true);
+    const { studentId } = await params;
+    const studentID = Array.isArray(studentId) ? studentId[0] : studentId;
+    const response = await client.generateStudentUserById(studentID);
+
+    if (isErrorResponse(response)) {
+      setAlert("ผิดพลาด", response.message, 0, false);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+    setAlert(
+      "สร้างบัญชีสำหรับนักเรียนเรียบร้อยแล้ว",
+      `ผู้ใช้: <b class="text-red-500">${response.login}</b> <br/>รหัสผ่าน: <b class="text-red-500">${response.password}</b><br/>*คุณจะเห็นรหัสผ่านนี้เพียงครั้งเดียวเท่านั้น`,
+      () => {
+        fetchData();
+      },
+      false
+    );
+  };
+
   useEffect(() => {
     if (!defaultValue) {
       fetchData();
@@ -182,7 +205,19 @@ export default function Page({ params }: PageProps) {
               />
             </div>
             <div className="flex justify-between items-center">
-              <div className=""></div>
+              <div className="">
+                {user?.permissions?.includes("modify-student-data") && (
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={onGenerateStudentUserById}
+                  >
+                    {defaultValue?.user_id != 0
+                      ? "สร้างรหัสผ่านใหม่"
+                      : "สร้างบัญชีของนักเรียน"}
+                  </Button>
+                )}
+              </div>
               <div className="">
                 {user?.permissions?.includes("modify-student-data") && (
                   <Button type="submit" className="w-full">

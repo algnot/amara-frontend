@@ -190,8 +190,9 @@ export default function Page({ params }: PageProps) {
               placeholder="email"
               defaultValue={defaultValue?.email ?? ""}
               disabled={
-                userData?.role === "ADMIN" &&
-                defaultValue?.role === "SUPER_ADMIN"
+                (userData?.role === "ADMIN" &&
+                  defaultValue?.role === "SUPER_ADMIN") ||
+                defaultValue?.role === "STUDENT"
               }
               required
             />
@@ -205,8 +206,9 @@ export default function Page({ params }: PageProps) {
               placeholder="ชื่อผู้ใช้งาน"
               defaultValue={defaultValue?.username ?? ""}
               disabled={
-                userData?.role === "ADMIN" &&
-                defaultValue?.role === "SUPER_ADMIN"
+                (userData?.role === "ADMIN" &&
+                  defaultValue?.role === "SUPER_ADMIN") ||
+                defaultValue?.role === "STUDENT"
               }
               required
             />
@@ -221,8 +223,9 @@ export default function Page({ params }: PageProps) {
                     selectedRole == null && "text-gray-400"
                   }`}
                   disabled={
-                    userData?.role === "ADMIN" &&
-                    defaultValue?.role === "SUPER_ADMIN"
+                    (userData?.role === "ADMIN" &&
+                      defaultValue?.role === "SUPER_ADMIN") ||
+                    defaultValue?.role === "STUDENT"
                   }
                 >
                   {selectedRole == null ? (
@@ -249,34 +252,37 @@ export default function Page({ params }: PageProps) {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="grid gap-2">
-            <Label className="mb-2">สิทธิ์การใช้งาน</Label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {permissionDatas?.datas
-                ?.sort((a, b) => a.name.localeCompare(b.name))
-                .map((value) => {
-                  const handleChange = (checked: boolean) => {
-                    if (
-                      userData?.role === "ADMIN" &&
-                      defaultValue?.role === "SUPER_ADMIN"
-                    ) {
-                      return;
-                    }
-                    setSelectedPermissions((prev) =>
-                      checked
-                        ? [...prev, Number(value.id)]
-                        : prev.filter((id) => id !== Number(value.id))
-                    );
-                  };
+          {defaultValue?.role !== "STUDENT" && (
+            <div className="grid gap-2">
+              <Label className="mb-2">สิทธิ์การใช้งาน</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {permissionDatas?.datas
+                  ?.sort((a, b) => a.name.localeCompare(b.name))
+                  .map((value) => {
+                    const handleChange = (checked: boolean) => {
+                      if (
+                        (userData?.role === "ADMIN" &&
+                          defaultValue?.role === "SUPER_ADMIN") ||
+                        defaultValue?.role === "STUDENT"
+                      ) {
+                        return;
+                      }
+                      setSelectedPermissions((prev) =>
+                        checked
+                          ? [...prev, Number(value.id)]
+                          : prev.filter((id) => id !== Number(value.id))
+                      );
+                    };
 
-                  return renderPermissionCheckbox(
-                    value,
-                    selectedPermissions,
-                    handleChange
-                  );
-                })}
+                    return renderPermissionCheckbox(
+                      value,
+                      selectedPermissions,
+                      handleChange
+                    );
+                  })}
+              </div>
             </div>
-          </div>
+          )}
           {isChangePassword && (
             <div className="grid gap-2">
               <Label htmlFor="newPassword">รหัสผ่านใหม่</Label>
@@ -286,35 +292,37 @@ export default function Page({ params }: PageProps) {
                 type="password"
                 placeholder="รหัสผ่านใหม่"
                 disabled={
-                  userData?.role === "ADMIN" &&
-                  defaultValue?.role === "SUPER_ADMIN"
+                  (userData?.role === "ADMIN" &&
+                    defaultValue?.role === "SUPER_ADMIN") ||
+                  defaultValue?.role === "STUDENT"
                 }
                 required
               />
             </div>
           )}
-          {(userData?.role !== "ADMIN" ||
-            defaultValue?.role !== "SUPER_ADMIN") && (
-            <div className="flex justify-between items-center mt-4">
-              <div>
-                <Button
-                  type="button"
-                  className="w-full"
-                  variant="outline"
-                  onClick={() => setIsChangePassword((prev) => !prev)}
-                >
-                  {isChangePassword
-                    ? "ยกเลิกการเปลี่ยนรหัสผ่าน"
-                    : "เปลี่ยนรหัสผ่าน"}
-                </Button>
+          {(userData?.role === "ADMIN" &&
+            defaultValue?.role === "SUPER_ADMIN") ||
+            (defaultValue?.role !== "STUDENT" && (
+              <div className="flex justify-between items-center mt-4">
+                <div>
+                  <Button
+                    type="button"
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => setIsChangePassword((prev) => !prev)}
+                  >
+                    {isChangePassword
+                      ? "ยกเลิกการเปลี่ยนรหัสผ่าน"
+                      : "เปลี่ยนรหัสผ่าน"}
+                  </Button>
+                </div>
+                <div>
+                  <Button type="submit" className="w-full">
+                    บันทึกข้อมูล
+                  </Button>
+                </div>
               </div>
-              <div>
-                <Button type="submit" className="w-full">
-                  บันทึกข้อมูล
-                </Button>
-              </div>
-            </div>
-          )}
+            ))}
         </div>
       </form>
     </div>
