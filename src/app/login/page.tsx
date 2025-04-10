@@ -43,7 +43,11 @@ export default function Page() {
       return;
     }
 
-    if (response.role === "ADMIN" || response.role === "SUPER_ADMIN" || response.role === "USER") {
+    if (
+      response.role === "ADMIN" ||
+      response.role === "SUPER_ADMIN" ||
+      response.role === "USER"
+    ) {
       window.location.href = "/dashboard";
     } else {
       window.location.href = "/student/dashboard";
@@ -103,6 +107,24 @@ export default function Page() {
                   </div>
                   <Button type="submit" className="w-full">
                     เข้าสู่ระบบ
+                  </Button>
+                  <div className="flex items-center gap-4">
+                    <div className="flex-grow h-px bg-muted" />
+                    <span className="text-muted-foreground text-sm">หรือ</span>
+                    <div className="flex-grow h-px bg-muted" />
+                  </div>
+                  <Button
+                    type="button"
+                    className="w-full gap-2"
+                    variant="outline"
+                  >
+                    <Image
+                      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                      alt="Google Logo"
+                      width={20}
+                      height={20}
+                    />
+                    เข้าสู่ระบบด้วย Google
                   </Button>
                 </div>
               </form>
