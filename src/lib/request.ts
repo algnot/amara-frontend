@@ -114,6 +114,19 @@ export class BackendClient {
     }
   }
 
+  async loginWithGoogle(token: string): Promise<LoginResponse | ErrorResponse> {
+    try {
+      const response = await this.client.post("/auth/google", {
+        token
+      });
+      setItem("access_token", response.data.access_token);
+      setItem("refresh_token", response.data.refresh_token);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
   async listSalePerson(
     limit: number,
     offset: number | "",

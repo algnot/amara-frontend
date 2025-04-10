@@ -12,7 +12,7 @@ export function ThemeProvider({
       {(process.env.NEXT_PUBLIC_ENV ?? "local") != "production" && (
         <div className="fixed bottom-0 right-0 z-50 m-2 rounded-lg bg-gray-800 p-2 text-white text-sm">
           <p>Development Mode</p>
-          <p>Env: {process.env.ENV}</p>
+          <p>Env: {process.env.NEXT_PUBLIC_ENV}</p>
         </div>
       )}
       <NextThemesProvider {...props}>{children}</NextThemesProvider>

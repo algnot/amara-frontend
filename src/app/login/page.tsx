@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
@@ -17,6 +16,7 @@ import { BackendClient } from "@/lib/request";
 import { isErrorResponse } from "@/types/request";
 import Image from "next/image";
 import React, { FormEvent, useEffect, useRef } from "react";
+import { auth, googleProvider, signInWithPopup } from "@/lib/firebase";
 
 export default function Page() {
   const client = new BackendClient();
@@ -61,6 +61,34 @@ export default function Page() {
       }
     }
   }, [user]);
+
+  const handleGoogleLogin = async () => {
+    try {
+      setFullLoading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      const token = await result.user.getIdToken();
+      const response = await client.loginWithGoogle(token);
+
+      if (isErrorResponse(response)) {
+        setFullLoading(false);
+        setAlert("ผิดพลาด", response.message, 0, true);
+        return;
+      }
+
+      if (
+        response.role === "ADMIN" ||
+        response.role === "SUPER_ADMIN" ||
+        response.role === "USER"
+      ) {
+        window.location.href = "/dashboard";
+      } else {
+        window.location.href = "/student/dashboard";
+      }
+    } catch (error) {
+      setAlert("ผิดพลาด", "Google login error:" + error, 0, true);
+      console.error("Google login error:", error);
+    }
+  };
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-blue-300">
@@ -117,6 +145,7 @@ export default function Page() {
                     type="button"
                     className="w-full gap-2"
                     variant="outline"
+                    onClick={handleGoogleLogin}
                   >
                     <Image
                       src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"

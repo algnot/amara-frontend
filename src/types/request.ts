@@ -259,4 +259,5 @@ export interface CreateUserResponse {
   role: string;
   permissions: number[];
   user_id: number;
+  google_uid?: string;
 }

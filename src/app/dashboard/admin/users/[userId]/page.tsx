@@ -20,6 +20,7 @@ import {
   ListPermissionResponse,
   UpdateUserRequest,
 } from "@/types/request";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
 export interface Role {
@@ -282,6 +283,22 @@ export default function Page({ params }: PageProps) {
                   })}
               </div>
             </div>
+          )}
+          {defaultValue?.google_uid && (
+            <Button
+              type="button"
+              className="gap-2 w-fit"
+              variant="outline"
+              // disabled
+            >
+              <Image
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google Logo"
+                width={20}
+                height={20}
+              />
+              {defaultValue.google_uid}
+            </Button>
           )}
           {isChangePassword && (
             <div className="grid gap-2">
