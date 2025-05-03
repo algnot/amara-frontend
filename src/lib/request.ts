@@ -33,7 +33,12 @@ import { getItem, removeItem, setItem } from "./storage";
 
 const handlerError = (error: unknown): ErrorResponse => {
   if (axios.isAxiosError(error)) {
-    if (error.response && error.response.data && error.response.data.message) {
+    if (error.status === 403) {
+      return {
+        status: false,
+        message: "Session expired. Please login again.",
+      };
+    } else if (error.response && error.response.data && error.response.data.message) {
       return {
         status: false,
         message: error.response.data.message,
@@ -63,6 +68,25 @@ export class BackendClient {
         "Authorization": `Bearer ${getItem("access_token")}`,
       },
     });
+
+    this.client.interceptors.response.use(
+      response => response,
+      async (error) => {
+        if (error.response && error.response.status === 403) {
+          if (getItem("refresh_token")) {
+            const refreshed = await this.generateNewAccessToken();
+            if (refreshed) {
+              error.config.headers["Authorization"] = `Bearer ${getItem("access_token")}`;
+              return this.client.request(error.config);
+            } else {
+              removeItem("refresh_token");
+              removeItem("access_token");
+            }
+          }
+        }
+        throw error;
+      }
+    );
   }
 
   async getUserInfo(): Promise<UserType | ErrorResponse> {
@@ -598,6 +622,16 @@ export class BackendClient {
       return response.data;
     } catch (e) {
       return handlerError(e);
+    }
+  }
+
+  async healthCheck(): Promise<boolean | ErrorResponse> {
+    try {
+      await this.client.get("/_hc");
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
   }
 }
