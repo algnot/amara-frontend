@@ -68,25 +68,6 @@ export class BackendClient {
         "Authorization": `Bearer ${getItem("access_token")}`,
       },
     });
-
-    this.client.interceptors.response.use(
-      response => response,
-      async (error) => {
-        if (error.response && error.response.status === 403) {
-          if (getItem("refresh_token")) {
-            const refreshed = await this.generateNewAccessToken();
-            if (refreshed) {
-              error.config.headers["Authorization"] = `Bearer ${getItem("access_token")}`;
-              return this.client.request(error.config);
-            } else {
-              removeItem("refresh_token");
-              removeItem("access_token");
-            }
-          }
-        }
-        throw error;
-      }
-    );
   }
 
   async getUserInfo(): Promise<UserType | ErrorResponse> {
