@@ -212,7 +212,7 @@ export default function Page({ params }: PageProps) {
                     type="button"
                     onClick={onGenerateStudentUserById}
                   >
-                    {(defaultValue?.user_id == 0 && defaultValue?.user_id == null)
+                    {(defaultValue?.user_id == 0 || defaultValue?.user_id == null)
                       ? "สร้างบัญชีของนักเรียน"
                       : "สร้างรหัสผ่านใหม่"}
                   </Button>
