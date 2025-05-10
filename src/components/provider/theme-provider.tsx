@@ -11,7 +11,7 @@ export function ThemeProvider({
     <>
       {(process.env.NEXT_PUBLIC_ENV ?? "local") != "production" && (
         <div className="fixed bottom-0 right-0 z-50 m-2 rounded-lg bg-gray-800 p-2 text-white text-sm">
-          <p>development Mode</p>
+          <p>development mode</p>
           <p>env: {process.env.NEXT_PUBLIC_ENV}</p>
         </div>
       )}
