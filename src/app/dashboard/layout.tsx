@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="rounded-xl">
         <NavigationProvider>{children}</NavigationProvider>
       </SidebarInset>
     </SidebarProvider>
