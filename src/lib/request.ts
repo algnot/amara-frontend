@@ -121,6 +121,8 @@ export class BackendClient {
 
   async loginWithGoogle(token: string): Promise<LoginResponse | ErrorResponse> {
     try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+  
       const response = await this.client.post("/auth/google", {
         token
       });
@@ -131,6 +133,7 @@ export class BackendClient {
       return handlerError(e);
     }
   }
+  
 
   async listSalePerson(
     limit: number,
