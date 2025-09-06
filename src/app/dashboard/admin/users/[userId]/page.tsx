@@ -344,9 +344,11 @@ export default function Page({ params }: PageProps) {
         </div>
       </form>
 
-      {defaultValue?.user_id && (
-        <ActivityLogs topic="user" refId={defaultValue.user_id.toString()} />
-      )}
+      <div className="my-4">
+        {defaultValue?.user_id && (
+          <ActivityLogs topic="user" refId={defaultValue.user_id.toString()} />
+        )}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
+import ActivityLogs from "@/components/ActivityLogs";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
@@ -78,7 +79,7 @@ export default function Page({ params }: PageProps) {
       () => {
         window.location.href = "/dashboard/course/edit/" + courseID;
       },
-      false
+      false,
     );
   };
 
@@ -100,7 +101,7 @@ export default function Page({ params }: PageProps) {
           path: "/dashboard/course",
         },
       ],
-      `[${response.course_code}] ${response.name_th}`
+      `[${response.course_code}] ${response.name_th}`,
     );
     if (response.version == "1") {
       setSelectedVersion({
@@ -124,97 +125,106 @@ export default function Page({ params }: PageProps) {
   }, []);
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} className="m-6">
-      <div className="flex justify-between items-center mb-6 ">
-        <div className="ml-4">{defaultValue?.name_th}</div>
-      </div>
-      <div className="p-6 border rounded-lg">
-        <div className="flex flex-col gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="course_code">รหัสวิชา</Label>
-            <Input
-              id="course_code"
-              name="course_code"
-              type="text"
-              placeholder="รหัสวิชา"
-              defaultValue={defaultValue?.course_code}
-              disabled={!user?.permissions?.includes("modify-course-data")}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="name_th">ชื่อหลักสูตร (ไทย)</Label>
-            <Input
-              id="name_th"
-              name="name_th"
-              type="text"
-              placeholder="ชื่อหลักสูตร (ไทย)"
-              defaultValue={defaultValue?.name_th}
-              disabled={!user?.permissions?.includes("modify-course-data")}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="name_en">ชื่อหลักสูตร (อังกฤษ)</Label>
-            <Input
-              id="name_en"
-              name="name_en"
-              type="text"
-              placeholder="ชื่อหลักสูตร (อังกฤษ)"
-              defaultValue={defaultValue?.name_en}
-              disabled={!user?.permissions?.includes("modify-course-data")}
-              required
-            />
-          </div>
-          <div className="grid gap-2 mt-4">
-            <Label>Version ใบประกาศ</Label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  disabled={!user?.permissions?.includes("modify-course-data")}
-                  className={`flex justify-between ${
-                    selectedVersion == null && "text-gray-400"
-                  }`}
+    <>
+      <form ref={formRef} onSubmit={onSubmit} className="m-6">
+        <div className="flex justify-between items-center mb-6 ">
+          <div className="ml-4">{defaultValue?.name_th}</div>
+        </div>
+        <div className="p-6 border rounded-lg">
+          <div className="flex flex-col gap-6">
+            <div className="grid gap-2">
+              <Label htmlFor="course_code">รหัสวิชา</Label>
+              <Input
+                id="course_code"
+                name="course_code"
+                type="text"
+                placeholder="รหัสวิชา"
+                defaultValue={defaultValue?.course_code}
+                disabled={!user?.permissions?.includes("modify-course-data")}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="name_th">ชื่อหลักสูตร (ไทย)</Label>
+              <Input
+                id="name_th"
+                name="name_th"
+                type="text"
+                placeholder="ชื่อหลักสูตร (ไทย)"
+                defaultValue={defaultValue?.name_th}
+                disabled={!user?.permissions?.includes("modify-course-data")}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="name_en">ชื่อหลักสูตร (อังกฤษ)</Label>
+              <Input
+                id="name_en"
+                name="name_en"
+                type="text"
+                placeholder="ชื่อหลักสูตร (อังกฤษ)"
+                defaultValue={defaultValue?.name_en}
+                disabled={!user?.permissions?.includes("modify-course-data")}
+                required
+              />
+            </div>
+            <div className="grid gap-2 mt-4">
+              <Label>Version ใบประกาศ</Label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    disabled={
+                      !user?.permissions?.includes("modify-course-data")
+                    }
+                    className={`flex justify-between ${
+                      selectedVersion == null && "text-gray-400"
+                    }`}
+                  >
+                    {selectedVersion == null ? (
+                      <>
+                        เลือก <ChevronDown className="h-4 w-4" />
+                      </>
+                    ) : (
+                      <>{selectedVersion.name}</>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  className="max-h-60 overflow-y-auto"
                 >
-                  {selectedVersion == null ? (
-                    <>
-                      เลือก <ChevronDown className="h-4 w-4" />
-                    </>
-                  ) : (
-                    <>{selectedVersion.name}</>
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="max-h-60 overflow-y-auto"
-              >
-                {allVersion.map((value, index) => {
-                  return (
-                    <DropdownMenuItem
-                      key={index}
-                      onClick={() => setSelectedVersion(value)}
-                    >
-                      {value.name}
-                    </DropdownMenuItem>
-                  );
-                })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className=""></div>
-            <div className="">
-              {user?.permissions?.includes("modify-course-data") && (
-                <Button type="submit" className="w-full">
-                  อัพเดทหลักสูตร
-                </Button>
-              )}
+                  {allVersion.map((value, index) => {
+                    return (
+                      <DropdownMenuItem
+                        key={index}
+                        onClick={() => setSelectedVersion(value)}
+                      >
+                        {value.name}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="flex justify-between items-center">
+              <div className=""></div>
+              <div className="">
+                {user?.permissions?.includes("modify-course-data") && (
+                  <Button type="submit" className="w-full">
+                    อัพเดทหลักสูตร
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
+      </form>
+      <div className="my-4 mx-6">
+        {defaultValue?.id && (
+          <ActivityLogs topic="course" refId={defaultValue.id.toString()} />
+        )}
       </div>
-    </form>
+    </>
   );
 }

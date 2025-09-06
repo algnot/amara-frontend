@@ -1,4 +1,5 @@
 "use client";
+import ActivityLogs from "@/components/ActivityLogs";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
@@ -57,7 +58,7 @@ export default function Page({ params }: PageProps) {
       () => {
         window.location.reload();
       },
-      false
+      false,
     );
   };
 
@@ -81,7 +82,7 @@ export default function Page({ params }: PageProps) {
           path: "/dashboard/certificate",
         },
       ],
-      `${response.certificate_number}`
+      `${response.certificate_number}`,
     );
     setDefaultValue(response);
   };
@@ -109,10 +110,10 @@ export default function Page({ params }: PageProps) {
           () => {
             window.location.href = "/dashboard/certificate";
           },
-          false
+          false,
         );
       },
-      true
+      true,
     );
   };
 
@@ -281,6 +282,15 @@ export default function Page({ params }: PageProps) {
           )}
         </div>
       </form>
+
+      <div className="my-4">
+        {defaultValue?.id && (
+          <ActivityLogs
+            topic="certificate"
+            refId={defaultValue.id.toString()}
+          />
+        )}
+      </div>
     </div>
   );
 }

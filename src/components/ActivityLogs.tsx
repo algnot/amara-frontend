@@ -23,7 +23,13 @@ export default function ActivityLogs({
       return;
     }
 
-    setDatas(resposne.datas);
+    // Sort by created_at in descending order (newest first)
+    const sortedData = resposne.datas.sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
+
+    setDatas(sortedData);
   };
 
   if (datas.length === 0) {
@@ -31,7 +37,7 @@ export default function ActivityLogs({
   }
 
   return (
-    <div className="p-6 border rounded-lg mt-4">
+    <div className="p-6 border rounded-lg">
       <h2 className="text-lg font-semibold mb-4">ประวัติการทำรายการ</h2>
       <div className="border rounded-lg mt-4 p-4 max-h-80 overflow-y-auto">
         {datas.map((log, index) => (

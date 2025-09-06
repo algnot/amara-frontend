@@ -1,4 +1,5 @@
 "use client";
+import ActivityLogs from "@/components/ActivityLogs";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
@@ -55,7 +56,7 @@ export default function Page({ params }: PageProps) {
       () => {
         window.location.href = "/dashboard/sale-person";
       },
-      false
+      false,
     );
   };
 
@@ -79,73 +80,88 @@ export default function Page({ params }: PageProps) {
           path: "/dashboard/sale-person",
         },
       ],
-      `${response.firstname} ${response.lastname}`
+      `${response.firstname} ${response.lastname}`,
     );
     setDefaultValue(response);
   };
 
   useEffect(() => {
-    if(!defaultValue) {
+    if (!defaultValue) {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} className="m-6">
-      <div className="flex justify-between items-center mb-6 ">
-        <div className="ml-4">{defaultValue?.firstname} {defaultValue?.lastname}</div>
-      </div>
-      <div className="p-6 border rounded-lg">
-        <div className="flex flex-col gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="firstname">ชื่อ</Label>
-            <Input
-              id="firstname"
-              name="firstname"
-              type="text"
-              placeholder="ชื่อ"
-              defaultValue={defaultValue?.firstname}
-              disabled={!user?.permissions?.includes("modify-sale-person-data")}
-              required
-            />
+    <>
+      <form ref={formRef} onSubmit={onSubmit} className="m-6">
+        <div className="flex justify-between items-center mb-6 ">
+          <div className="ml-4">
+            {defaultValue?.firstname} {defaultValue?.lastname}
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="lastname">นามสกุล</Label>
-            <Input
-              id="lastname"
-              name="lastname"
-              type="text"
-              placeholder="นามสกุล"
-              defaultValue={defaultValue?.lastname}
-              disabled={!user?.permissions?.includes("modify-sale-person-data")}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="code">รหัสผู้ขาย</Label>
-            <Input
-              id="code"
-              name="code"
-              type="text"
-              placeholder="รหัสผู้ขาย"
-              defaultValue={defaultValue?.reference_code}
-              disabled={!user?.permissions?.includes("modify-sale-person-data")}
-              required
-            />
-          </div>
-          <div className="flex justify-between items-center">
-            <div className=""></div>
-            <div className="">
-              {user?.permissions?.includes("modify-sale-person-data") && (
-                <Button type="submit" className="w-full">
-                  บันทึกข้อมูล
-                </Button>
-              )}
+        </div>
+        <div className="p-6 border rounded-lg">
+          <div className="flex flex-col gap-6">
+            <div className="grid gap-2">
+              <Label htmlFor="firstname">ชื่อ</Label>
+              <Input
+                id="firstname"
+                name="firstname"
+                type="text"
+                placeholder="ชื่อ"
+                defaultValue={defaultValue?.firstname}
+                disabled={
+                  !user?.permissions?.includes("modify-sale-person-data")
+                }
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="lastname">นามสกุล</Label>
+              <Input
+                id="lastname"
+                name="lastname"
+                type="text"
+                placeholder="นามสกุล"
+                defaultValue={defaultValue?.lastname}
+                disabled={
+                  !user?.permissions?.includes("modify-sale-person-data")
+                }
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="code">รหัสผู้ขาย</Label>
+              <Input
+                id="code"
+                name="code"
+                type="text"
+                placeholder="รหัสผู้ขาย"
+                defaultValue={defaultValue?.reference_code}
+                disabled={
+                  !user?.permissions?.includes("modify-sale-person-data")
+                }
+                required
+              />
+            </div>
+            <div className="flex justify-between items-center">
+              <div className=""></div>
+              <div className="">
+                {user?.permissions?.includes("modify-sale-person-data") && (
+                  <Button type="submit" className="w-full">
+                    บันทึกข้อมูล
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
+      </form>
+      <div className="my-4 mx-6">
+        {defaultValue?.id && (
+          <ActivityLogs topic="sale-person" refId={defaultValue.id.toString()} />
+        )}
       </div>
-    </form>
+    </>
   );
 }

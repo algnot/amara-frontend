@@ -1,4 +1,5 @@
 "use client";
+import ActivityLogs from "@/components/ActivityLogs";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
@@ -56,7 +57,7 @@ export default function Page({ params }: PageProps) {
       () => {
         window.location.href = "/dashboard";
       },
-      false
+      false,
     );
   };
 
@@ -78,7 +79,7 @@ export default function Page({ params }: PageProps) {
           path: "/dashboard",
         },
       ],
-      `${response.firstname_th} ${response.lastname_th}`
+      `${response.firstname_th} ${response.lastname_th}`,
     );
     setDefaultValue(response);
   };
@@ -102,7 +103,7 @@ export default function Page({ params }: PageProps) {
       () => {
         fetchData();
       },
-      false
+      false,
     );
   };
 
@@ -212,7 +213,7 @@ export default function Page({ params }: PageProps) {
                     type="button"
                     onClick={onGenerateStudentUserById}
                   >
-                    {(defaultValue?.user_id == 0 || defaultValue?.user_id == null)
+                    {defaultValue?.user_id == 0 || defaultValue?.user_id == null
                       ? "สร้างบัญชีของนักเรียน"
                       : "สร้างรหัสผ่านใหม่"}
                   </Button>
@@ -229,7 +230,8 @@ export default function Page({ params }: PageProps) {
           </div>
         </div>
       </form>
-      <div className="p-6 border rounded-lg m-6">
+
+      <div className="p-6 border rounded-lg mx-6 my-4">
         <div className="flex flex-col gap-3">
           <div>ใบประกาศ</div>
           {defaultValue?.certificate.map((value, index) => {
@@ -244,6 +246,12 @@ export default function Page({ params }: PageProps) {
             );
           })}
         </div>
+      </div>
+
+      <div className="mx-6">
+        {defaultValue?.id && (
+          <ActivityLogs topic="student" refId={defaultValue.id.toString()} />
+        )}
       </div>
     </>
   );
