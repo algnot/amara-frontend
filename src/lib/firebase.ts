@@ -11,7 +11,11 @@ const firebaseConfig = {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+console.log("Firebase Config", firebaseConfig);
+
 const app = initializeApp(firebaseConfig);
+console.log(app);
+
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export { signInWithPopup };

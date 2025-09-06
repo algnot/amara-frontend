@@ -261,3 +261,12 @@ export interface CreateUserResponse {
   user_id: number;
   google_uid?: string;
 }
+
+export interface ActivityLog {
+  content: string;
+  created_at: string;
+}
+
+export interface GetActivityLogResponse {
+  datas: ActivityLog[]
+}

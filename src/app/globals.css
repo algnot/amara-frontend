@@ -42,6 +42,7 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -85,5 +86,39 @@ body {
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .activity-log-content {
+    @apply text-sm;
+  }
+
+  .activity-log-content ul {
+    @apply list-disc list-inside ml-4 space-y-1;
+  }
+
+  .activity-log-content ol {
+    @apply list-decimal list-inside ml-4 space-y-1;
+  }
+
+  .activity-log-content li {
+    @apply text-sm;
+  }
+
+  .activity-log-content p {
+    @apply mb-2 last:mb-0;
+  }
+
+  .activity-log-content strong {
+    @apply font-semibold;
+  }
+
+  .activity-log-content em {
+    @apply italic;
+  }
+
+  .activity-log-content br {
+    @apply block mb-1;
   }
 }

@@ -9,6 +9,7 @@ import {
   CreateUserResponse,
   ErrorResponse,
   GenerateStudentUserByIdResponse,
+  GetActivityLogResponse,
   GetCertificateResponse,
   ListCertificateResponse,
   ListCourseResponse,
@@ -616,6 +617,18 @@ export class BackendClient {
     } catch (e) {
       console.log(e);
       return false;
+    }
+  }
+
+  async getActivityLogs(
+    topic: string,
+    refId: string
+  ): Promise<GetActivityLogResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get(`/activity-logs/${topic}/${refId}`);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
     }
   }
 }

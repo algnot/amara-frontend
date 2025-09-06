@@ -1,4 +1,5 @@
 "use client";
+import ActivityLogs from "@/components/ActivityLogs";
 import { useAlertContext } from "@/components/provider/alert-provider";
 import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
 import { useNavigateContext } from "@/components/provider/navigation-provider";
@@ -35,7 +36,7 @@ type PageProps = {
 const renderPermissionCheckbox = (
   value: ListPermissionResponse["datas"][0],
   selected: number[],
-  onChange: (checked: boolean) => void
+  onChange: (checked: boolean) => void,
 ) => {
   const isChecked = selected.includes(value.id);
 
@@ -111,7 +112,7 @@ export default function Page({ params }: PageProps) {
       () => {
         window.location.href = "/dashboard/admin/users/" + response.user_id;
       },
-      false
+      false,
     );
   };
 
@@ -144,7 +145,7 @@ export default function Page({ params }: PageProps) {
           path: "/dashboard/admin/users",
         },
       ],
-      userResponse.username
+      userResponse.username,
     );
     setLoading(false);
   };
@@ -271,14 +272,14 @@ export default function Page({ params }: PageProps) {
                       setSelectedPermissions((prev) =>
                         checked
                           ? [...prev, Number(value.id)]
-                          : prev.filter((id) => id !== Number(value.id))
+                          : prev.filter((id) => id !== Number(value.id)),
                       );
                     };
 
                     return renderPermissionCheckbox(
                       value,
                       selectedPermissions,
-                      handleChange
+                      handleChange,
                     );
                   })}
               </div>
@@ -342,6 +343,10 @@ export default function Page({ params }: PageProps) {
             ))}
         </div>
       </form>
+
+      {defaultValue?.user_id && (
+        <ActivityLogs topic="user" refId={defaultValue.user_id.toString()} />
+      )}
     </div>
   );
 }
