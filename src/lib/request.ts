@@ -204,6 +204,17 @@ export class BackendClient {
     }
   }
 
+  async getStudentByStudentCodePublic(
+    studentCode: string
+  ): Promise<StudentResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get("/student/get/" + studentCode + "/public");
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
   async getStudentByStudentCode(
     studentCode: string
   ): Promise<StudentResponse | ErrorResponse> {

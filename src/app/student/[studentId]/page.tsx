@@ -27,7 +27,7 @@ export default function Page({ params }: PageProps) {
   const fetchData = async () => {
     const { studentId } = await params;
     const studentID = Array.isArray(studentId) ? studentId[0] : studentId;
-    const response = await client.getStudentByStudentCode(studentID);
+    const response = await client.getStudentByStudentCodePublic(studentID);
 
     if (isErrorResponse(response)) {
       setAlert("ผิดพลาด", response.message, 0, false);
