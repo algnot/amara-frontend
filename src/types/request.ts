@@ -219,6 +219,7 @@ export interface GetCertificateResponse {
   given_date: string;
   start_date: string;
   end_date: string;
+  archived: boolean;
 }
 
 export interface UpdateCertificateRequest {

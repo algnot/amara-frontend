@@ -127,45 +127,50 @@ export default function Page({ params }: PageProps) {
   return (
     <div className="m-6">
       <div className="flex justify-between items-center mb-2">
-        <div className="ml-4">
-          เลขที่ใบประกาศ {defaultValue?.certificate_number}
+        <div className={"ml-4 " + (defaultValue?.archived && "text-red-600")}>
+          เลขที่ใบประกาศ {defaultValue?.certificate_number}{" "}
+          {defaultValue?.archived && "(Archived)"}
         </div>
         <div className="flex gap-2">
-          {defaultValue?.batch !== "draft" && defaultValue?.given_date && (
-            <>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
-                target="_blank"
-              >
-                <Button className="w-full">พิมพ์ใบประกาศ (ไทย)</Button>
-              </Link>
-              <Link
-                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
-                target="_blank"
-              >
-                <Button className="w-full">ตัวอย่างใบประกาศ (ไทย)</Button>
-              </Link>
-            </>
-          )}
+          {defaultValue?.batch !== "draft" &&
+            defaultValue?.given_date &&
+            !defaultValue.archived && (
+              <>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
+                  target="_blank"
+                >
+                  <Button className="w-full">พิมพ์ใบประกาศ (ไทย)</Button>
+                </Link>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/th/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
+                  target="_blank"
+                >
+                  <Button className="w-full">ตัวอย่างใบประกาศ (ไทย)</Button>
+                </Link>
+              </>
+            )}
         </div>
       </div>
       <div className="flex gap-2 justify-end mb-4">
-        {defaultValue?.batch !== "draft" && defaultValue?.given_date && (
-          <>
-            <Link
-              href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
-              target="_blank"
-            >
-              <Button className="w-full">พิมพ์ใบประกาศ (อังกฤษ)</Button>
-            </Link>
-            <Link
-              href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
-              target="_blank"
-            >
-              <Button className="w-full">ตัวอย่างใบประกาศ (อังกฤษ)</Button>
-            </Link>
-          </>
-        )}
+        {defaultValue?.batch !== "draft" &&
+          defaultValue?.given_date &&
+          !defaultValue.archived && (
+            <>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}?without_layout=true`}
+                target="_blank"
+              >
+                <Button className="w-full">พิมพ์ใบประกาศ (อังกฤษ)</Button>
+              </Link>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_BACKEND_PATH}/certificate/print/en/${defaultValue.course.version}/${defaultValue?.certificate_number}`}
+                target="_blank"
+              >
+                <Button className="w-full">ตัวอย่างใบประกาศ (อังกฤษ)</Button>
+              </Link>
+            </>
+          )}
       </div>
       <form className="p-6 border rounded-lg" ref={formRef} onSubmit={onSubmit}>
         <div className="flex flex-col gap-6">
@@ -211,7 +216,10 @@ export default function Page({ params }: PageProps) {
                       .split("T")[0]
                   : ""
               }
-              disabled={!user?.permissions?.includes("modify-certificate-data")}
+              disabled={
+                !user?.permissions?.includes("modify-certificate-data") ||
+                defaultValue?.archived
+              }
               required
             />
           </div>
@@ -227,7 +235,10 @@ export default function Page({ params }: PageProps) {
                   ? new Date(defaultValue.end_date).toISOString().split("T")[0]
                   : ""
               }
-              disabled={!user?.permissions?.includes("modify-certificate-data")}
+              disabled={
+                !user?.permissions?.includes("modify-certificate-data") ||
+                defaultValue?.archived
+              }
               required
             />
           </div>
@@ -245,7 +256,10 @@ export default function Page({ params }: PageProps) {
                       .split("T")[0]
                   : ""
               }
-              disabled={!user?.permissions?.includes("modify-certificate-data")}
+              disabled={
+                !user?.permissions?.includes("modify-certificate-data") ||
+                defaultValue?.archived
+              }
               required
             />
           </div>
@@ -257,11 +271,14 @@ export default function Page({ params }: PageProps) {
               type="text"
               placeholder="รุ่นที่"
               defaultValue={defaultValue?.batch}
-              disabled={!user?.permissions?.includes("modify-certificate-data")}
+              disabled={
+                !user?.permissions?.includes("modify-certificate-data") ||
+                defaultValue?.archived
+              }
               required
             />
           </div>
-          {user?.permissions?.includes("modify-certificate-data") && (
+          {user?.permissions?.includes("modify-certificate-data") && !defaultValue?.archived && (
             <div className="flex justify-between items-center mt-4">
               <div>
                 <Button
