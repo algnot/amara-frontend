@@ -215,6 +215,7 @@ export interface GetCertificateResponse {
   certificate_number: number;
   student: StudentResponse;
   course: CourseResponse;
+  additional_course: CourseResponse;
   batch: string;
   given_date: string;
   start_date: string;
@@ -227,6 +228,7 @@ export interface UpdateCertificateRequest {
   end_date: string;
   batch: string;
   given_date: number;
+  additional_course_id: number;
 }
 
 export interface GetCertificateParamRequest {

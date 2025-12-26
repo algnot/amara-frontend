@@ -5,10 +5,21 @@ import { useFullLoadingContext } from "@/components/provider/full-loading-provid
 import { useNavigateContext } from "@/components/provider/navigation-provider";
 import { useUserContext } from "@/components/provider/user-provider";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenu,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { BackendClient } from "@/lib/request";
-import { GetCertificateResponse, isErrorResponse } from "@/types/request";
+import {
+  CourseResponse,
+  GetCertificateResponse,
+  isErrorResponse,
+} from "@/types/request";
 import { Label } from "@radix-ui/react-label";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 
@@ -24,6 +35,9 @@ export default function Page({ params }: PageProps) {
   const user = useUserContext();
   const [defaultValue, setDefaultValue] = useState<GetCertificateResponse>();
   const formRef = useRef<HTMLFormElement | null>(null);
+  const [allCouse, setAllCouse] = useState<CourseResponse[]>([]);
+  const [additionalCourse, setAdditionalCourse] =
+    useState<CourseResponse | null>(null);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     const { certificateId } = await params;
@@ -44,6 +58,7 @@ export default function Page({ params }: PageProps) {
       end_date,
       given_date,
       batch,
+      additional_course_id: additionalCourse?.id ?? 0,
     });
 
     if (isErrorResponse(response)) {
@@ -63,6 +78,20 @@ export default function Page({ params }: PageProps) {
   };
 
   const fetchData = async () => {
+    const allCouse = await client.listCourse(99999, "", "");
+    if (isErrorResponse(allCouse)) {
+      setAlert("ผิดพลาด", allCouse.message, 0, true);
+      setLoading(false);
+      return;
+    }
+    setAllCouse([{
+      id: 0,
+      course_code: "",
+      name_en: "no select",
+      name_th: "ไม่เลือก",
+      version: ""
+    }, ...allCouse.datas]);
+
     const { certificateId } = await params;
     const certificateID = Array.isArray(certificateId)
       ? certificateId[0]
@@ -73,6 +102,10 @@ export default function Page({ params }: PageProps) {
       setAlert("ผิดพลาด", response.message, 0, false);
       setLoading(false);
       return;
+    }
+
+    if(response.additional_course) {
+      setAdditionalCourse(response.additional_course)
     }
 
     setNavigation(
@@ -202,6 +235,44 @@ export default function Page({ params }: PageProps) {
             <Label htmlFor="lastname">ผู้ดูแล</Label>
             <div className="text-md">{defaultValue?.student.sale_person}</div>
           </div>
+          <div className="grid gap-2 mt-4">
+            <Label>หลักสูตรเพิ่มเติม</Label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={`flex justify-between ${
+                    additionalCourse == null && "text-gray-400"
+                  }`}
+                >
+                  {additionalCourse == null ? (
+                    <>
+                      เลือก <ChevronDown className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      {additionalCourse.name_th ?? "ยังไม่มีหลักสูตรเพิ่มเติม"} ({additionalCourse.name_en ?? "no additional couse"})
+                    </>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="max-h-60 overflow-y-auto"
+              >
+                {allCouse.map((value, index) => {
+                  return (
+                    <DropdownMenuItem
+                      key={index}
+                      onClick={() => setAdditionalCourse(value)}
+                    >
+                      {value.name_th} ({value.name_en})
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="start_date">วันที่เริ่มเรียน</Label>
             <Input
@@ -278,25 +349,26 @@ export default function Page({ params }: PageProps) {
               required
             />
           </div>
-          {user?.permissions?.includes("modify-certificate-data") && !defaultValue?.archived && (
-            <div className="flex justify-between items-center mt-4">
-              <div>
-                <Button
-                  type="button"
-                  onClick={onArchive}
-                  className="w-full"
-                  variant="destructive"
-                >
-                  ลบใบประกาศ
-                </Button>
+          {user?.permissions?.includes("modify-certificate-data") &&
+            !defaultValue?.archived && (
+              <div className="flex justify-between items-center mt-4">
+                <div>
+                  <Button
+                    type="button"
+                    onClick={onArchive}
+                    className="w-full"
+                    variant="destructive"
+                  >
+                    ลบใบประกาศ
+                  </Button>
+                </div>
+                <div>
+                  <Button type="submit" className="w-full">
+                    บันทึกข้อมูล
+                  </Button>
+                </div>
               </div>
-              <div>
-                <Button type="submit" className="w-full">
-                  บันทึกข้อมูล
-                </Button>
-              </div>
-            </div>
-          )}
+            )}
         </div>
       </form>
 
