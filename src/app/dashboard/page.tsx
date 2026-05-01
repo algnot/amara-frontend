@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { BackendClient } from "@/lib/request";
 import { isErrorResponse } from "@/types/request";
 import React, { useEffect } from "react";
+import Link from "next/link";
 
 export default function Page() {
   const setLoading = useFullLoadingContext();
@@ -45,11 +46,18 @@ export default function Page() {
 
   return (
     <div className="container mx-auto py-10 px-5">
-      {user?.permissions?.includes("export-student-data") && (
-        <div className="flex justify-end">
-          <Button onClick={exportPdf}>Export ข้อมูลนักเรียน</Button>
-        </div>
-      )}
+      <div className="flex justify-end gap-2">
+        {user?.permissions?.includes("modify-sale-person-data") && (
+            <Link href="/dashboard/student/add">
+              <Button>เพิ่มข้อมูลนักเรียน</Button>
+            </Link>
+        )}
+        {user?.permissions?.includes("export-student-data") && (
+            <div className="flex justify-end">
+              <Button onClick={exportPdf}>Export ข้อมูลนักเรียน</Button>
+            </div>
+        )}
+      </div>
       <DataTable
         fetchData={(limit, offset, text) =>
           client.listStudent(limit, offset, text)
