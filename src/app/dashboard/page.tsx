@@ -11,6 +11,7 @@ import {
 import {BackendClient} from "@/lib/request";
 import {useFullLoadingContext} from "@/components/provider/full-loading-provider";
 import {ChartResponse, GetDashboardSummaryResponse, isErrorResponse} from "@/types/request";
+import {useAlertContext} from "@/components/provider/alert-provider";
 
 const Badge = ({title, value, icon, className = ""}: {title: string, value: string | number, icon: ReactNode, className?: string}) => {
     return (
@@ -31,6 +32,7 @@ const Badge = ({title, value, icon, className = ""}: {title: string, value: stri
 export default function Page() {
     const client = new BackendClient();
     const setLoading = useFullLoadingContext();
+    const setAlert = useAlertContext();
     const [chartFilter, setChartFilter] = useState(getDefaultChartDateRangeFilterValue);
     const [summaryData, setSummaryData] = useState<GetDashboardSummaryResponse>({
         total_certificate: 0, total_certificate_in_month: 0, total_draft_certificate: 0, total_students: 0
@@ -46,6 +48,8 @@ export default function Page() {
         setLoading(true);
         const response = await client.getDashboardSummary();
         if(isErrorResponse(response)) {
+            setLoading(false);
+            setAlert("ผิดพลาด", response.message, 0, true);
             return;
         }
         setSummaryData(response);
@@ -57,6 +61,8 @@ export default function Page() {
             chartFilter.endYear,
         )
         if(isErrorResponse(chartMonthResponse)) {
+            setLoading(false);
+            setAlert("ผิดพลาด", chartMonthResponse.message, 0, true);
             return;
         }
         setCertificateChartData(chartMonthResponse);
@@ -68,6 +74,8 @@ export default function Page() {
             chartFilter.endYear,
         )
         if(isErrorResponse(chartCourseResponse)) {
+            setLoading(false);
+            setAlert("ผิดพลาด", chartCourseResponse.message, 0, true);
             return;
         }
         setCourseChartData(chartCourseResponse);
