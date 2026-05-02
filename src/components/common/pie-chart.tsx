@@ -44,9 +44,20 @@ const getCoordinatesForPercent = (percent: number) => {
 };
 
 const getSlicePath = (startPercent: number, endPercent: number) => {
+    const sliceSize = endPercent - startPercent;
+
+    if (sliceSize >= 0.999999) {
+        return [
+            "M 1 0",
+            "A 1 1 0 1 1 -1 0",
+            "A 1 1 0 1 1 1 0",
+            "L 0 0",
+        ].join(" ");
+    }
+
     const [startX, startY] = getCoordinatesForPercent(startPercent);
     const [endX, endY] = getCoordinatesForPercent(endPercent);
-    const largeArcFlag = endPercent - startPercent > 0.5 ? 1 : 0;
+    const largeArcFlag = sliceSize > 0.5 ? 1 : 0;
 
     return [
         `M ${startX} ${startY}`,

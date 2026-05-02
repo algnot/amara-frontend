@@ -94,42 +94,45 @@ export const BarChart = ({
             </CardHeader>
             <CardContent className="flex flex-1">
                 <div className="flex w-full overflow-hidden">
-                    <div className="grid w-full min-w-0 flex-1 grid-cols-[40px_minmax(0,1fr)] gap-2 sm:grid-cols-[48px_minmax(0,1fr)] sm:gap-3">
-                        <div className="flex min-h-56 flex-col justify-between text-right text-xs text-muted-foreground sm:min-h-72">
+                    <div className="grid w-full min-w-0 flex-1 grid-cols-[40px_minmax(0,1fr)] grid-rows-[minmax(14rem,1fr)_1.25rem] gap-x-2 gap-y-2 sm:grid-cols-[48px_minmax(0,1fr)] sm:grid-rows-[minmax(18rem,1fr)_1.25rem] sm:gap-x-3">
+                        <div className="flex min-h-56 flex-col justify-between pt-6 text-right text-xs text-muted-foreground sm:min-h-72">
                             {resolvedYAxisTicks.map((tick) => (
                                 <span key={tick}>{tick.toLocaleString()}</span>
                             ))}
                         </div>
 
                         <div ref={chartRef} className="relative min-h-56 min-w-0 border-b border-l border-border sm:min-h-72">
-                            <div className="absolute inset-0 flex flex-col justify-between">
+                            <div className="absolute inset-x-0 bottom-0 top-6 flex flex-col justify-between">
                                 {resolvedYAxisTicks.map((tick) => (
                                     <div key={tick} className="border-t border-dashed border-border first:border-t-0" />
                                 ))}
                             </div>
 
                             <div
-                                className="relative z-10 grid h-full min-w-0 items-end gap-2 px-2 sm:gap-3 sm:px-4"
+                                className="absolute inset-x-0 bottom-0 top-6 z-10 grid min-w-0 items-end gap-2 px-2 sm:gap-3 sm:px-4"
                                 style={{gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`}}
                             >
-                                {data.map(({key, value}, index) => (
-                                    <div key={key} className="flex h-full min-w-0 flex-col items-center justify-end gap-2">
-                                        <div className="flex w-full flex-col items-center gap-1" style={{height: `${Math.min((value / maxValue) * 100, 100)}%`}}>
-                                            <span className="text-xs font-medium text-foreground">
-                                                {value.toLocaleString()}
-                                            </span>
-                                            <div
-                                                className="chart-bar-fill min-h-1 w-full flex-1 rounded-t bg-primary transition-opacity hover:opacity-80"
-                                                style={{animationDelay: `${index * 80}ms`}}
-                                                title={`${key}: ${value.toLocaleString()}${valueLabel ? ` ${valueLabel}` : ""}`}
-                                                onMouseEnter={(event) => setTooltipPosition(event, key, value)}
-                                                onMouseMove={(event) => setTooltipPosition(event, key, value)}
-                                                onMouseLeave={() => setTooltip(null)}
-                                            />
+                                {data.map(({key, value}, index) => {
+                                    const barHeight = Math.min((value / maxValue) * 100, 100);
+
+                                    return (
+                                        <div key={key} className="flex h-full min-w-0 items-end">
+                                            <div className="flex w-full flex-col items-center gap-1" style={{height: `max(${barHeight}%, 1.25rem)`}}>
+                                                <span className="text-xs font-medium leading-none text-foreground">
+                                                    {value.toLocaleString()}
+                                                </span>
+                                                <div
+                                                    className="chart-bar-fill min-h-1 w-full flex-1 rounded-t bg-primary transition-opacity hover:opacity-80"
+                                                    style={{animationDelay: `${index * 80}ms`}}
+                                                    title={`${key}: ${value.toLocaleString()}${valueLabel ? ` ${valueLabel}` : ""}`}
+                                                    onMouseEnter={(event) => setTooltipPosition(event, key, value)}
+                                                    onMouseMove={(event) => setTooltipPosition(event, key, value)}
+                                                    onMouseLeave={() => setTooltip(null)}
+                                                />
+                                            </div>
                                         </div>
-                                        <span className="h-5 w-full truncate text-center text-xs text-muted-foreground">{key}</span>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                             {tooltip && (
                                 <div
@@ -146,6 +149,16 @@ export const BarChart = ({
                                     </div>
                                 </div>
                             )}
+                        </div>
+
+                        <div />
+                        <div
+                            className="grid min-w-0 gap-2 px-2 sm:gap-3 sm:px-4"
+                            style={{gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`}}
+                        >
+                            {data.map(({key}) => (
+                                <span key={key} className="h-5 w-full truncate text-center text-xs text-muted-foreground">{key}</span>
+                            ))}
                         </div>
                     </div>
                 </div>

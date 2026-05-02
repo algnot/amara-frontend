@@ -1,6 +1,6 @@
 "use client";
 
-import {ArrowRight, CalendarRange, Filter} from "lucide-react";
+import {ArrowDown, ArrowRight, CalendarRange, Filter} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {
     Select,
@@ -128,7 +128,7 @@ export const ChartDateRangeFilter = ({
         <div className={cn("rounded-md border bg-card p-3 shadow-sm", className)}>
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex min-w-0 flex-col gap-2 rounded-md bg-muted/60 p-1.5 sm:flex-row sm:items-center sm:gap-1">
-                    <div className="flex h-9 items-center justify-center px-2 text-muted-foreground">
+                    <div className="hidden h-9 items-center justify-center px-2 text-muted-foreground sm:flex">
                         <CalendarRange size={18} />
                     </div>
 
@@ -169,7 +169,8 @@ export const ChartDateRangeFilter = ({
                     </div>
 
                     <div className="flex h-9 items-center justify-center px-2 text-muted-foreground">
-                        <ArrowRight size={18} />
+                        <ArrowDown size={18} className="sm:hidden" />
+                        <ArrowRight size={18} className="hidden sm:block" />
                     </div>
 
                     <div className="grid min-w-0 grid-cols-2 gap-1 sm:w-[236px]">
