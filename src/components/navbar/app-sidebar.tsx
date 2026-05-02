@@ -30,10 +30,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     const navs: NavItem[] = [];
     const studentItems: NavItem[] = [];
+    const dashboardItems: NavItem[] = [];
     const courseItems: NavItem[] = [];
 
+    if (user.permissions.includes("read-dashboard-data")) {
+      dashboardItems.push({ title: "แดชบอร์ด", url: "/dashboard" });
+    }
+
     if (user.permissions.includes("read-student-data")) {
-      studentItems.push({ title: "นักเรียน", url: "/dashboard" });
+      studentItems.push({ title: "นักเรียน", url: "/dashboard/student" });
     }
 
     if (user.permissions.includes("read-certificate-data")) {
@@ -56,6 +61,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     if (user.permissions.includes("read-sale-person-data")) {
       courseItems.push({ title: "พนักงานขาย", url: "/dashboard/sale-person" });
+    }
+
+    if (dashboardItems.length > 0) {
+      navs.push({
+        title: "แดชบอร์ด",
+        url: "#",
+        icon: Table2,
+        isActive: true,
+        items: dashboardItems,
+      });
     }
 
     if (studentItems.length > 0) {

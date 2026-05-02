@@ -52,7 +52,7 @@ export default function Page({ params }: PageProps) {
           <Card>
             <div className="flex justify-center mt-4">
               <Image
-                src="/logo-th.jpg"
+                src="/logo-th.png"
                 alt="logo-th"
                 width={180}
                 height={180}

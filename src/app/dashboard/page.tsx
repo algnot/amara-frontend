@@ -1,77 +1,113 @@
 "use client";
-import { DataTable } from "@/components/datatable/datatable";
-import { useAlertContext } from "@/components/provider/alert-provider";
-import { useFullLoadingContext } from "@/components/provider/full-loading-provider";
-import { useNavigateContext } from "@/components/provider/navigation-provider";
-import { useUserContext } from "@/components/provider/user-provider";
-import { Button } from "@/components/ui/button";
-import { BackendClient } from "@/lib/request";
-import { isErrorResponse } from "@/types/request";
-import React, { useEffect } from "react";
-import Link from "next/link";
+
+import {Album, UsersRound} from "lucide-react";
+import {ReactNode, useEffect, useState} from "react";
+import {BarChart} from "@/components/common/bar-chart";
+import {PieChart} from "@/components/common/pie-chart";
+import {
+    ChartDateRangeFilter,
+    getDefaultChartDateRangeFilterValue,
+} from "@/components/common/chart-date-range-filter";
+import {BackendClient} from "@/lib/request";
+import {useFullLoadingContext} from "@/components/provider/full-loading-provider";
+import {ChartResponse, GetDashboardSummaryResponse, isErrorResponse} from "@/types/request";
+
+const Badge = ({title, value, icon, className = ""}: {title: string, value: string | number, icon: ReactNode, className?: string}) => {
+    return (
+        <div className={`flex border bg-card items-center justify-between p-6 rounded-md shadow-sm ${className}`}>
+            {icon}
+            <div className="">
+                <div className="text-xs font-bold text-right">{title}</div>
+                {
+                    typeof value === "number" ?
+                        <div className="text-right">{value.toLocaleString()}</div>
+                        : <div className="text-right">{value}</div>
+                }
+            </div>
+        </div>
+    )
+}
 
 export default function Page() {
-  const setLoading = useFullLoadingContext();
-  const setAlert = useAlertContext();
-  const setNavigation = useNavigateContext();
-  const user = useUserContext();
-  const client = new BackendClient();
+    const client = new BackendClient();
+    const setLoading = useFullLoadingContext();
+    const [chartFilter, setChartFilter] = useState(getDefaultChartDateRangeFilterValue);
+    const [summaryData, setSummaryData] = useState<GetDashboardSummaryResponse>({
+        total_certificate: 0, total_certificate_in_month: 0, total_draft_certificate: 0, total_students: 0
+    })
+    const [certificateChartData, setCertificateChartData] = useState<ChartResponse[]>([])
+    const [courseChartData, setCourseChartData] = useState<ChartResponse[]>([])
 
-  useEffect(() => {
-    setLoading(false);
-    setNavigation([], "นักเรียน");
-  }, [setLoading, setNavigation]);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-  const exportPdf = async () => {
-    const response = await client.exportStudentCSV();
+    const fetchData = async () => {
+        setLoading(true);
+        const response = await client.getDashboardSummary();
+        if(isErrorResponse(response)) {
+            return;
+        }
+        setSummaryData(response);
 
-    if (isErrorResponse(response)) {
-      setLoading(false);
-      setAlert("ผิดพลาด", response.message, 0, true);
-      return;
+        const chartMonthResponse = await client.getChartMonthSummary(
+            chartFilter.startMonth,
+            chartFilter.startYear,
+            chartFilter.endMonth,
+            chartFilter.endYear,
+        )
+        if(isErrorResponse(chartMonthResponse)) {
+            return;
+        }
+        setCertificateChartData(chartMonthResponse);
+
+        const chartCourseResponse = await client.getChartCourseSummary(
+            chartFilter.startMonth,
+            chartFilter.startYear,
+            chartFilter.endMonth,
+            chartFilter.endYear,
+        )
+        if(isErrorResponse(chartCourseResponse)) {
+            return;
+        }
+        setCourseChartData(chartCourseResponse);
+        setLoading(false);
     }
 
-    const blob = new Blob([response], { type: "text/csv;charset=utf-8;" });
-    const url = window.URL.createObjectURL(blob);
+    const onSubmit = async () => {
+        await fetchData()
+    }
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "student_data.csv";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    setLoading(false);
-  };
-
-  return (
-    <div className="container mx-auto py-10 px-5">
-      <div className="flex justify-end gap-2">
-        {user?.permissions?.includes("modify-sale-person-data") && (
-            <Link href="/dashboard/student/add">
-              <Button>เพิ่มข้อมูลนักเรียน</Button>
-            </Link>
-        )}
-        {user?.permissions?.includes("export-student-data") && (
-            <div className="flex justify-end">
-              <Button onClick={exportPdf}>Export ข้อมูลนักเรียน</Button>
+    return (
+        <div className="container mx-auto p-4 md:p-10">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <Badge title="นักเรียนทั้งหมด" value={summaryData.total_students} icon={ <UsersRound size={30} /> } />
+                <Badge title="ใบประกาศทั้งหมด" value={summaryData.total_certificate} icon={ <Album size={30} /> } />
+                <Badge title="คำขอใบประกาศทั้งหมด" value={summaryData.total_draft_certificate} icon={ <Album size={30} /> } />
+                <Badge title="ใบประกาศในเดือนนี้" value={summaryData.total_certificate_in_month} icon={ <Album size={30} /> } />
             </div>
-        )}
-      </div>
-      <DataTable
-        fetchData={(limit, offset, text) =>
-          client.listStudent(limit, offset, text)
-        }
-        columns={[
-          { key: "student_id", label: "รหัสนักเรียน" },
-          { key: "firstname_th", label: "ชื่อ (ไทย)" },
-          { key: "lastname_th", label: "นามสกุล (ไทย)" },
-          { key: "firstname_en", label: "ชื่อ (อังกฤษ)" },
-          { key: "lastname_en", label: "นามสกุล (อังกฤษ)" },
-        ]}
-        href="/dashboard/student/edit/"
-        navigateKey="student_id"
-      />
-    </div>
-  );
+
+            <ChartDateRangeFilter
+                value={chartFilter}
+                onChange={setChartFilter}
+                className="mt-6"
+                onSubmit={onSubmit}
+            />
+
+            <div className="mt-6 grid grid-cols-1 items-stretch gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(360px,1fr)]">
+                <BarChart
+                    title="ใบประกาศแบ่งตามเดือน"
+                    data={certificateChartData}
+                    valueLabel="ใบประกาศ"
+                    className="h-full"
+                />
+                <PieChart
+                    title="ใบประกาศแบ่งตามหลักสูตร"
+                    data={courseChartData}
+                    valueLabel="ใบประกาศ"
+                    className="h-full"
+                />
+            </div>
+        </div>
+    )
 }

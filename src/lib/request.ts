@@ -3,7 +3,7 @@ import {
   AddPermissionRequest,
   AddPermissionResponse,
   AddSalePersonRequest,
-  AddStudentRequest,
+  AddStudentRequest, ChartResponse,
   CourseResponse,
   CreateUserRequest,
   CreateUserResponse,
@@ -11,6 +11,7 @@ import {
   GenerateStudentUserByIdResponse,
   GetActivityLogResponse,
   GetCertificateResponse,
+  GetDashboardSummaryResponse,
   ListCertificateResponse,
   ListCourseResponse,
   ListPermissionResponse,
@@ -637,6 +638,37 @@ export class BackendClient {
   ): Promise<GetActivityLogResponse | ErrorResponse> {
     try {
       const response = await this.client.get(`/activity-logs/${topic}/${refId}`);
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getDashboardSummary(): Promise<GetDashboardSummaryResponse | ErrorResponse> {
+    try {
+      const response = await this.client.get("/dashboard/summary");
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getChartMonthSummary(startMonth: string, startYear: string, endMonth: string, endYear: string): Promise<ChartResponse[] | ErrorResponse> {
+    try {
+      const response = await this.client.get(
+          `/dashboard/chart-month-summary?start_month=${startMonth}&start_year=${startYear}&end_month=${endMonth}&end_year=${endYear}`,
+      );
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getChartCourseSummary(startMonth: string, startYear: string, endMonth: string, endYear: string): Promise<ChartResponse[] | ErrorResponse> {
+    try {
+      const response = await this.client.get(
+          `/dashboard/chart-course-summary?start_month=${startMonth}&start_year=${startYear}&end_month=${endMonth}&end_year=${endYear}`,
+      );
       return response.data;
     } catch (e) {
       return handlerError(e);

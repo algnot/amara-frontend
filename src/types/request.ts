@@ -273,3 +273,15 @@ export interface ActivityLog {
 export interface GetActivityLogResponse {
   datas: ActivityLog[]
 }
+
+export interface GetDashboardSummaryResponse {
+  total_certificate: number;
+  total_certificate_in_month: number;
+  total_draft_certificate: number;
+  total_students: number;
+}
+
+export interface ChartResponse {
+  key: string;
+  value: number;
+}

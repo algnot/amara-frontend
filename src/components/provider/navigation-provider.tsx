@@ -65,7 +65,7 @@ export default function NavigationProvider({
 
               {navigateItems.map((navigateItem) => {
                 return (
-                  <>
+                  <React.Fragment key={navigateItem.path}>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem
                       key={navigateItem.name}
@@ -75,7 +75,7 @@ export default function NavigationProvider({
                         {navigateItem.name}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
-                  </>
+                  </React.Fragment>
                 );
               })}
 
