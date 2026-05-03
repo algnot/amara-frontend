@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Chakra_Petch } from "next/font/google";
+import { Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import RootLayoutClient from "./root-layout-client";
 
-const baseFont = Chakra_Petch({
+const baseFont = Noto_Sans_Thai({
   weight: "400",
-  subsets: ["thai", "latin", "latin-ext", "vietnamese"],
+  subsets: ["thai", "latin", "latin-ext"],
 });
 
 export const metadata: Metadata = {
