@@ -179,7 +179,7 @@ export default function Page({ params }: PageProps) {
                 id="firstname_en"
                 name="firstname_en"
                 type="text"
-                placeholder="ชื่อ (ไทย)"
+                placeholder="ชื่อ (อังกฤษ)"
                 defaultValue={defaultValue?.firstname_en}
                 disabled={!user?.permissions?.includes("modify-student-data")}
                 required
@@ -191,7 +191,7 @@ export default function Page({ params }: PageProps) {
                 id="lastname_en"
                 name="lastname_en"
                 type="text"
-                placeholder="นามสกุล (ไทย)"
+                placeholder="นามสกุล (อังกฤษ)"
                 defaultValue={defaultValue?.lastname_en}
                 disabled={!user?.permissions?.includes("modify-student-data")}
                 required

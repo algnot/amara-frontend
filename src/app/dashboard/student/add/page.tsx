@@ -113,7 +113,7 @@ export default function Page() {
                                 id="firstname_en"
                                 name="firstname_en"
                                 type="text"
-                                placeholder="ชื่อ (ไทย)"
+                                placeholder="ชื่อ (อังกฤษ)"
                                 disabled={!user?.permissions?.includes("modify-student-data")}
                                 required
                             />
@@ -124,7 +124,7 @@ export default function Page() {
                                 id="lastname_en"
                                 name="lastname_en"
                                 type="text"
-                                placeholder="นามสกุล (ไทย)"
+                                placeholder="นามสกุล (อังกฤษ)"
                                 disabled={!user?.permissions?.includes("modify-student-data")}
                                 required
                             />
