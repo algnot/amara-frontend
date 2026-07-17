@@ -174,24 +174,24 @@ export default function Page({ params }: PageProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="firstname_en">ชื่อนักเรียน (ภาษาอังกฤษ)</Label>
+              <Label htmlFor="firstname_en">ชื่อ (อังกฤษ)</Label>
               <Input
                 id="firstname_en"
                 name="firstname_en"
                 type="text"
-                placeholder="ชื่อนักเรียน (ภาษาอังกฤษ)"
+                placeholder="ชื่อ (อังกฤษ)"
                 defaultValue={defaultValue?.firstname_en}
                 disabled={!user?.permissions?.includes("modify-student-data")}
                 required
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="lastname_en">นามสกุลนักเรียน (ภาษาอังกฤษ)</Label>
+              <Label htmlFor="lastname_en">นามสกุล (อังกฤษ)</Label>
               <Input
                 id="lastname_en"
                 name="lastname_en"
                 type="text"
-                placeholder="นามสกุลนักเรียน (ภาษาอังกฤษ)"
+                placeholder="นามสกุล (อังกฤษ)"
                 defaultValue={defaultValue?.lastname_en}
                 disabled={!user?.permissions?.includes("modify-student-data")}
                 required

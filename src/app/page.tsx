@@ -131,19 +131,19 @@ export default function Page() {
                   />
                 </div>
                 <div className="grid gap-2 mt-4">
-                  <Label>ชื่อนักเรียน (ภาษาอังกฤษ)*</Label>
+                  <Label>ชื่อ (อังกฤษ)*</Label>
                   <Input
                     type="text"
-                    placeholder="ชื่อนักเรียน (ภาษาอังกฤษ)"
+                    placeholder="ชื่อ (อังกฤษ)"
                     value={firstnameEN}
                     onChange={(e) => setFirstnameEN(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2 mt-4">
-                  <Label>นามสกุลนักเรียน (ภาษาอังกฤษ)*</Label>
+                  <Label>นามสกุล (อังกฤษ)*</Label>
                   <Input
                     type="text"
-                    placeholder="นามสกุลนักเรียน (ภาษาอังกฤษ)"
+                    placeholder="นามสกุล (อังกฤษ)"
                     value={lastnameEN}
                     onChange={(e) => setLastnameEN(e.target.value)}
                   />
