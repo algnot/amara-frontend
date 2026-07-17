@@ -113,37 +113,37 @@ export default function Page() {
                   </DropdownMenu>
                 </div> */}
                 <div className="grid gap-2 mt-4">
-                  <Label>ชื่อนักเรียน (ภาษาไทย)*</Label>
+                  <Label>ชื่อ (ภาษาไทย)*</Label>
                   <Input
                     type="text"
-                    placeholder="ชื่อนักเรียน (ภาษาไทย)"
+                    placeholder="ชื่อ (ภาษาไทย)"
                     value={firstnameTH}
                     onChange={(e) => setFirstnameTH(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2 mt-4">
-                  <Label>นามสกุลนักเรียน (ภาษาไทย)*</Label>
+                  <Label>นามสกุล (ภาษาไทย)*</Label>
                   <Input
                     type="text"
-                    placeholder="นามสกุลนักเรียน (ภาษาไทย)"
+                    placeholder="นามสกุล (ภาษาไทย)"
                     value={lastnameTH}
                     onChange={(e) => setLastnameTH(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2 mt-4">
-                  <Label>ชื่อนักเรียน (ภาษาอังกฤษ)*</Label>
+                  <Label>First Name (English)*</Label>
                   <Input
                     type="text"
-                    placeholder="ชื่อนักเรียน (ภาษาอังกฤษ)"
+                    placeholder="First Name (English)"
                     value={firstnameEN}
                     onChange={(e) => setFirstnameEN(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2 mt-4">
-                  <Label>นามสกุลนักเรียน (ภาษาอังกฤษ)*</Label>
+                  <Label>Last Name (English)*</Label>
                   <Input
                     type="text"
-                    placeholder="นามสกุลนักเรียน (ภาษาอังกฤษ)"
+                    placeholder="Last Name (English)"
                     value={lastnameEN}
                     onChange={(e) => setLastnameEN(e.target.value)}
                   />
