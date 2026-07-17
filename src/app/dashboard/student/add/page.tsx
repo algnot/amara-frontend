@@ -108,23 +108,23 @@ export default function Page() {
                             />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="firstname_en">First Name (English)</Label>
+                            <Label htmlFor="firstname_en">ชื่อนักเรียน (ภาษาอังกฤษ)</Label>
                             <Input
                                 id="firstname_en"
                                 name="firstname_en"
                                 type="text"
-                                placeholder="First Name (English)"
+                                placeholder="ชื่อนักเรียน (ภาษาอังกฤษ)"
                                 disabled={!user?.permissions?.includes("modify-student-data")}
                                 required
                             />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="lastname_en">Last Name (English)</Label>
+                            <Label htmlFor="lastname_en">นามสกุลนักเรียน (ภาษาอังกฤษ)</Label>
                             <Input
                                 id="lastname_en"
                                 name="lastname_en"
                                 type="text"
-                                placeholder="Last Name (English)"
+                                placeholder="นามสกุลนักเรียน (ภาษาอังกฤษ)"
                                 disabled={!user?.permissions?.includes("modify-student-data")}
                                 required
                             />
